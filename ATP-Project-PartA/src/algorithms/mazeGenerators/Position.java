@@ -4,6 +4,8 @@ public class Position {
     int RowIndex;
     int ColumnIndex;
 
+    boolean visited;
+
     public Position(int rowIndex, int columnIndex){
         RowIndex=rowIndex;
         ColumnIndex=columnIndex;
@@ -19,5 +21,13 @@ public class Position {
 
     public String toString(){
         return "{"+RowIndex+","+ColumnIndex+"}";
+    }
+
+    public boolean gotVisited(){
+        return visited;
+    }
+
+    public void  set_visited(){
+        this.visited = true;
     }
 }

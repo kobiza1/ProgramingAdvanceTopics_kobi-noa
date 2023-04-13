@@ -9,11 +9,15 @@ public class MyMazeGenerator extends AMazeGenerator{
     private Integer row_len;
 
     private int[][] maze_map;
+    private List<Integer> edges_pool;
+
 
     public MyMazeGenerator(){
         maze_map = null;
         randomizer = new Random();
+        edges_pool = new ArrayList<Integer>();
         adjacency_map = new HashMap<>();
+
     }
 
     @Override
@@ -21,6 +25,7 @@ public class MyMazeGenerator extends AMazeGenerator{
             column_len = rows_num;
             row_len = columns_num;
             maze_map = new int[rows_num][columns_num];
+
             for(int i=0; i<rows_num; i++){
                 for(int j=0; j<columns_num; j++){
                     maze_map[i][j] = 1;
@@ -28,34 +33,42 @@ public class MyMazeGenerator extends AMazeGenerator{
             }
             initialize_adjacency_map(columns_num, rows_num);
             primAlgo();
-            return new Maze(maze_map, rows_num, columns_num);
 
+        return new Maze(maze_map, rows_num, columns_num);
     }
+
+
 
     private void primAlgo(){
 
-        List<Integer> visited = new ArrayList<>();
-        List<Integer> unvisited = new ArrayList<>();
+        //List<Integer> visited = new ArrayList<>();
+        //List<Integer> unvisited = new ArrayList<>();
 
-        for(int i=1; i<column_len*row_len; i++){
+       /* for(int i=1; i<column_len*row_len; i++){
             unvisited.add(i);
-        }
+        }*/
 
         int cur_cell = 0;
         // put 0 in the first cell and the last one
         maze_map[0][0] = 0;
-        maze_map[column_len-1][row_len-1] = 0;
-        visited.add(cur_cell);
+       // visited.add(cur_cell);
 
-
-        while (!unvisited.isEmpty()){
-            List<Integer[]> edges_pool = edges_to_unvisited_cells(visited); // chose random cell to visit
-            Integer[] edge = edges_pool.get(randomizer.nextInt(edges_pool.size()));
-            int i = (edge[1] / row_len);
-            int j = edge[1] % row_len;
-            maze_map[i][j] = 0;
-            visited.add(edge[1]);
-            unvisited.remove(edge[1]);
+        Integer edge = null;
+        int row, col, random;
+        while (maze_map[column_len-1][row_len-1] != 0){
+            edges_to_unvisited_cells(cur_cell); // choose random cell to visit
+            //if(edges_pool.size() <= 0) {break;}
+            random = randomizer.nextInt(10);
+            if(random < 7)
+                edge = edges_pool.get(edges_pool.size() - 1);//randomizer.nextInt(edges_pool.size()));
+            else
+                edge = edges_pool.get(randomizer.nextInt(edges_pool.size()));
+            edges_pool.remove(edge);
+            row = (edge / row_len);
+            col = edge % row_len;
+            maze_map[row][col] = 0;
+            //unvisited.remove(edge);
+            cur_cell = edge;
         }
     }
 
@@ -97,49 +110,18 @@ public class MyMazeGenerator extends AMazeGenerator{
         }
     }*/
 
-    private List<Integer[]> edges_to_unvisited_cells(List<Integer> visited){
-        List<Integer[]> edges_pool = new ArrayList<>();
-
-        for(Integer num : visited){
-
-            int row = num / row_len;
-            int col = num % row_len;
-
-            if (row > 0){
-                int top_node = num - row_len;
-                if(!visited.contains(top_node)){
-                    Integer[] edge = {num, top_node};
-                    edges_pool.add(edge);
-                }
-            }
-
-            if (col > 0){
-                int left_node = num - 1;
-                if (!visited.contains(left_node)) {
-                    Integer[] edge = {num, left_node};
-                    edges_pool.add(edge);
-                }
-            }
-
-            if (row < row_len - 1) {
-                int bottom_node = num + row_len;
-                if (!visited.contains(bottom_node)) {
-                    Integer[] edge = {num, bottom_node};
-                    edges_pool.add(edge);
-                }
-            }
-
-            if (col < row_len - 1) {
-                int right_node = num + 1;
-                if(!visited.contains(right_node)) {
-                    Integer[] edge = {num, right_node};
-                    edges_pool.add(edge);
-                }
+    private void edges_to_unvisited_cells(int cur_cell) {
+        int row, column;
+        for (Integer num : adjacency_map.get(cur_cell)) {
+            row = num / row_len;
+            column = num % row_len;
+            if (maze_map[row][column] != 0 && !edges_pool.contains(num)) {
+                    edges_pool.add(num);
             }
         }
-
-        return edges_pool;
+        //for(int i=0; i<edges_pool.size(); i++){
+         //   System.out.print(edges_pool.get(i) + " ");
+       // }
+       // System.out.println();
     }
-
-
 }
