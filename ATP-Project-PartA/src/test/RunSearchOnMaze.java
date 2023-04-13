@@ -2,7 +2,7 @@ package test;
 
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
-//import algorithms.mazeGenerators.MyMazeGenerator;
+import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.SimpleMazeGenerator;
 import algorithms.search.*;
 import java.util.ArrayList;
@@ -31,8 +31,10 @@ public class RunSearchOnMaze {
                     %s",i,solutionPath.get(i)));
         }
     }*/
-        SimpleMazeGenerator simple_maze = new SimpleMazeGenerator();
-        long i = simple_maze.measureAlgorithmTimeMillis(1000, 1000);
-        System.out.println(i);
+        IMazeGenerator mg = new MyMazeGenerator();
+        long maze = mg.measureAlgorithmTimeMillis(6, 5);
+        //SimpleMazeGenerator simple_maze = new SimpleMazeGenerator();
+        //long i = simple_maze.measureAlgorithmTimeMillis(1000, 1000);
+        System.out.println(maze);
     }
 }
