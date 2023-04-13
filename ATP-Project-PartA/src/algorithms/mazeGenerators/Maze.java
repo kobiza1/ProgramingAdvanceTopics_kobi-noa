@@ -25,8 +25,8 @@ public class Maze {
 
     public void Print(){
         for(int i=0; i<rows_number; i++){
-            for (int j=0; j<columns_number; i++){
-                System.out.println(maze_board[i][j]);
+            for (int j=0; j<columns_number; j++){
+                System.out.print(maze_board[i][j] + "  ");
             }
         }
     }

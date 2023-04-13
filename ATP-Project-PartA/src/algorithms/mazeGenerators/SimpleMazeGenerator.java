@@ -9,11 +9,11 @@ public class SimpleMazeGenerator extends AMazeGenerator{
         int zeros_or_ones, random_break;
         Random r = new Random();
         int [][] maze = new int[rows_num][columns_num];
+        zeros_or_ones = r.nextInt(2);
         for (int i=0; i<rows_num; i++){
-            zeros_or_ones = r.nextInt(2);
+            random_break = r.nextInt(columns_num);
             for (int j=0; j<columns_num; j++){
-                random_break = r.nextInt(columns_num);
-                if(zeros_or_ones == 1 && random_break != j){
+                if(i % 2 == zeros_or_ones && random_break != j){
                     maze[i][j] = 1;
                 }
                 else {
