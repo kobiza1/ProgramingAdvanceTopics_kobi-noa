@@ -24,10 +24,12 @@ public class Maze {
 
 
     public void Print(){
+        System.out.println("S="+getStartPosition()+" D="+getGoalPosition());
         for(int i=0; i<rows_number; i++){
             for (int j=0; j<columns_number; j++){
                 System.out.print(maze_board[i][j] + "  ");
             }
+            System.out.println();
         }
     }
 }

@@ -11,8 +11,11 @@ public class MyMazeGenerator extends AMazeGenerator{
     public MyMazeGenerator(){}
 
     @Override
-    public Maze generate(int column_num, int row_num) {
-        return null;
+    public Maze generate(int columns_num, int rows_num) {
+            column_len = rows_num;
+            row_len = columns_num;
+
+
     }
     
 
