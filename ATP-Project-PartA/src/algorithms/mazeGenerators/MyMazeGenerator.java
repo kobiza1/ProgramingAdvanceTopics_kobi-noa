@@ -1,127 +1,129 @@
 package algorithms.mazeGenerators;
 
 import java.util.*;
-
 public class MyMazeGenerator extends AMazeGenerator{
-    private Map<Integer, List<Integer>> adjacency_map;
-    private Random randomizer;
-    private Integer column_len;
-    private Integer row_len;
+        private ArrayList<Position> walls_list;
+        private Maze my_maze;
+        private Random randomizer;
+        public MyMazeGenerator() {}
 
-    private int[][] maze_map;
-    private List<Integer> edges_pool;
+        @Override
+        public Maze generate(int rows_num, int columns_num) {
 
-
-    public MyMazeGenerator(){
-        maze_map = null;
-        randomizer = new Random();
-        edges_pool = new ArrayList<Integer>();
-        adjacency_map = new HashMap<>();
-
-    }
-
-    @Override
-    public Maze generate(int columns_num, int rows_num) {
-            column_len = rows_num;
-            row_len = columns_num;
-            maze_map = new int[rows_num][columns_num];
-
-            for(int i=0; i<rows_num; i++){
-                for(int j=0; j<columns_num; j++){
-                    maze_map[i][j] = 1;
-                }
+            if (rows_num <= 0 || columns_num <= 0) {
+               return null;
             }
-            initialize_adjacency_map(columns_num, rows_num);
+
+            number_of_rows = rows_num;
+            number_of_columns = columns_num;
+
+            randomizer = new Random();
+            walls_list = new ArrayList();
+
+            int[][] ones_maze_board = initialize_with_ones();
+            my_maze = new Maze(ones_maze_board, rows_num, columns_num);
+
+            Position startPosition = new Position(0, 0);
+            my_maze.setStartPosition(startPosition);
+            my_maze.set_value_of_position(startPosition.getRowIndex(), startPosition.getColumnIndex(), 0); //0 in Start position
+            this.add_wall_to_list(startPosition);
+
             primAlgo();
 
-        return new Maze(maze_map, rows_num, columns_num);
-    }
-
-
-
-    private void primAlgo(){
-
-        //List<Integer> visited = new ArrayList<>();
-        //List<Integer> unvisited = new ArrayList<>();
-
-       /* for(int i=1; i<column_len*row_len; i++){
-            unvisited.add(i);
-        }*/
-
-        int cur_cell = 0;
-        // put 0 in the first cell and the last one
-        maze_map[0][0] = 0;
-       // visited.add(cur_cell);
-
-        Integer edge = null;
-        int row, col, random;
-        while (maze_map[column_len-1][row_len-1] != 0){
-            edges_to_unvisited_cells(cur_cell); // choose random cell to visit
-            //if(edges_pool.size() <= 0) {break;}
-            random = randomizer.nextInt(10);
-            if(random < 7)
-                edge = edges_pool.get(edges_pool.size() - 1);//randomizer.nextInt(edges_pool.size()));
-            else
-                edge = edges_pool.get(randomizer.nextInt(edges_pool.size()));
-            edges_pool.remove(edge);
-            row = (edge / row_len);
-            col = edge % row_len;
-            maze_map[row][col] = 0;
-            //unvisited.remove(edge);
-            cur_cell = edge;
+            return my_maze;
         }
-    }
 
-    private void initialize_adjacency_map(int column_num, int row_num){
-        for(int i=0; i<row_num; i++){
-            for(int j=0; j<column_num; j++){
-                List<Integer> cur_list = new ArrayList<>();
-                Integer cur_cell = i*row_len + j;
-                if(i != 0){
-                    cur_list.add(cur_cell - row_len);
+        private void primAlgo(){
+            /**
+             * implement the prim algorithms, choose random wall to break and then
+             * add all the walls that connected to this cell
+             *
+             */
+            Position GoalPosition = new Position(0, 0);
+
+            while(!walls_list.isEmpty()){
+
+                Position cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
+
+                if(num_of_neighbors(cur_position) == 1){
+                    my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
+                    GoalPosition = cur_position;
+                    add_wall_to_list(cur_position);
+
                 }
-                if(i != column_len-1){
-                    cur_list.add(cur_cell + row_len);
+            }
+            my_maze.setGoalPosition(GoalPosition);
+        }
+
+        private int[][] initialize_with_ones() {
+
+            int[][] mat = new int[number_of_rows][number_of_columns];
+            for(int i=0; i<number_of_rows; i++){
+                for (int j=0; j<number_of_columns; j++){
+                    mat[i][j] = 1;
                 }
-                if(j != 0){
-                    cur_list.add(cur_cell - 1);
-                }
-                if(j != row_len-1){
-                    cur_list.add(cur_cell+1);
-                }
-                adjacency_map.put(cur_cell, cur_list);
+            }
+            return mat;
+        }
+
+
+        private int num_of_neighbors(Position p){
+
+            int row = p.getRowIndex();
+            int column = p.getColumnIndex();
+            int num_of_neighbors = 0;
+
+            if (this.is_valid_position(row, column - 1) && (my_maze.get_value_of_position(row,column - 1) == 0)) {
+                num_of_neighbors++;
+            }
+            if (this.is_valid_position(row, column + 1) && (my_maze.get_value_of_position(row,column + 1) == 0)) {
+                num_of_neighbors++;
+            }
+            if (this.is_valid_position(row - 1, column) && (my_maze.get_value_of_position(row - 1, column) == 0)) {
+                num_of_neighbors++;
+            }
+            if (this.is_valid_position(row + 1, column) && (my_maze.get_value_of_position(row + 1, column) == 0)) {
+                num_of_neighbors++;
+            }
+            return num_of_neighbors;
+        }
+
+        private void add_wall_to_list(Position p){
+
+            int row = p.getRowIndex();
+            int column = p.getColumnIndex();
+
+            if (is_valid_position(row - 1, column) && my_maze.get_value_of_position(row - 1, column) == 1) {
+                walls_list.add(new Position(row - 1, column));
+            }
+
+            if (this.is_valid_position(row + 1, column) && my_maze.get_value_of_position(row + 1, column) == 1) {
+                walls_list.add(new Position(row + 1, column));
+            }
+
+            if (this.is_valid_position(row, column - 1) && my_maze.get_value_of_position(row,column - 1) == 1) {
+                walls_list.add(new Position(row, column - 1));
+            }
+
+            if (this.is_valid_position(row, column + 1) && my_maze.get_value_of_position(row,column + 1) == 1) {
+                walls_list.add(new Position(row, column + 1));
             }
         }
-    }
-    
 
-   /* private int get_neighbour_direction(Integer cur_node, Integer next_cell){
-        if (cur_node - row_len == next_cell){
-            return 0; // TOP
-        }
-        else if (cur_node - 1 == next_cell){
-            return 3; // LEFT
-        }
-        else if (cur_node + row_len == next_cell){
-            return 2; // BOTTOM
-        }
-        else{
-            return 1; // RIGHT
-        }
-    }*/
+        private boolean is_valid_position(int row,int col){
 
-    private void edges_to_unvisited_cells(int cur_cell) {
-        int row, column;
-        for (Integer num : adjacency_map.get(cur_cell)) {
-            row = num / row_len;
-            column = num % row_len;
-            if (maze_map[row][column] != 0 && !edges_pool.contains(num)) {
-                    edges_pool.add(num);
+            if(row < 0){
+                return false;
+            }
+            if (row > number_of_rows - 1){
+                return false;
+            }
+            if(col < 0){
+                return false;
+            }
+            else{
+                return (col <= number_of_columns - 1);
             }
         }
-        //for(int i=0; i<edges_pool.size(); i++){
-         //   System.out.print(edges_pool.get(i) + " ");
-       // }
-       // System.out.println();
-    }
+
 }
