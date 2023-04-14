@@ -33,7 +33,7 @@ public class RunSearchOnMaze {
     }*/
         IMazeGenerator mg = new MyMazeGenerator();
         long maze = mg.measureAlgorithmTimeMillis(1000, 1000);
-        Maze m1 = mg.generate(1000, 1000);
+        Maze m1 = mg.generate(10, 10);
         //SimpleMazeGenerator simple_maze = new SimpleMazeGenerator();
         //long i = simple_maze.measureAlgorithmTimeMillis(1000, 1000);
         System.out.println(maze);

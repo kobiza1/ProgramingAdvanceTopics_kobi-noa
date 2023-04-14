@@ -28,6 +28,13 @@ public class Maze {
         return GoalPosition;
     }
 
+    public int getRows_number() {
+        return rows_number;
+    }
+
+    public int getColumns_number() {
+        return columns_number;
+    }
     public boolean isValid(int row, int column){
         if(row<0 || row>=rows_number)
             return false;
@@ -71,11 +78,5 @@ public class Maze {
 
     }
 
-    public int getRows_number() {
-        return rows_number;
-    }
 
-    public int getColumns_number() {
-        return columns_number;
-    }
 }

@@ -1,6 +1,6 @@
 package algorithms.search;
 
 public interface ISearchingAlgorithm {
-    Solution search(ISearchable searchable);
+    Solution solve(ISearchable searchable);
     String getName();
 }
