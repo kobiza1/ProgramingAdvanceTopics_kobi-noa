@@ -4,21 +4,21 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
-public class BestFirstSearch extends ASearchingAlgorithm{
+public class BestFirstSearch extends BreadthFirstSearch{
+
+    public BestFirstSearch(){
+        toVisit = new PriorityQueue<>();
+    }
+
     @Override
-    public Solution search(Maze maze) {
+    public Solution solve(ISearchable searchable) {
         return null;
     }
 
-    public Solution FindPath(Integer CurrState){
-        List<MazeState> solution = new LinkedList<>();
-        MazeState start = new MazeState(0,0);
-        solution.add(start);
-
-
-        return new Solution(solution);
+    @Override
+    public String getName() {
+        return "BestFirstSearch";
     }
 }

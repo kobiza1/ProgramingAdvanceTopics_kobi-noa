@@ -3,7 +3,7 @@ package algorithms.search;
 import java.util.List;
 
 public interface ISearchable {
-    MazeState getStartState();
-    MazeState getGolState();
-    List<MazeState> getAllSuccessors(MazeState state);
+    AState getStartState();
+    AState getGoalState();
+    List<AState> getAllPossibleStats(AState state);
 }

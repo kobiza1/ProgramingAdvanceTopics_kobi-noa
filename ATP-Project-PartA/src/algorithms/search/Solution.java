@@ -3,9 +3,13 @@ package algorithms.search;
 import java.util.List;
 
 public class Solution {
-    private List<MazeState> solution;
+    private List<AState> solution;
 
-    public Solution(List<MazeState> _solution){
-        solution=_solution;
+    public Solution(List<AState> path){
+        solution=path;
+    }
+
+    public List<AState> getSolution() {
+        return solution;
     }
 }
