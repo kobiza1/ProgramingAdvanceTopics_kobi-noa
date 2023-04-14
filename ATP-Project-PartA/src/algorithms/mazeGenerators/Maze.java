@@ -17,12 +17,24 @@ public class Maze {
         this.StartPosition = new Position(0,0);
     }
 
+    public int[][] getMaze_board(){
+        return maze_board;
+    }
     public Position getStartPosition(){
         return StartPosition;
     }
 
     public Position getGoalPosition(){
         return GoalPosition;
+    }
+
+    public boolean isValid(int row, int column){
+        if(row<0 || row>=rows_number)
+            return false;
+        else if(column<0 || column>=columns_number)
+            return false;
+
+        return true;
     }
 
 
@@ -57,5 +69,13 @@ public class Maze {
             return -1;
         }
 
+    }
+
+    public int getRows_number() {
+        return rows_number;
+    }
+
+    public int getColumns_number() {
+        return columns_number;
     }
 }

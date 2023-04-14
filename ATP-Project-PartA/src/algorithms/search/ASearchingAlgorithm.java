@@ -1,4 +1,7 @@
 package algorithms.search;
 
-public class ASearchingAlgorithm {
+import algorithms.mazeGenerators.Maze;
+
+public abstract class ASearchingAlgorithm {
+    public abstract Solution search(Maze maze);
 }
