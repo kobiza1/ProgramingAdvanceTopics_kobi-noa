@@ -21,4 +21,5 @@ public abstract class AState {
     public AState getCameFrom() {
         return cameFrom;
     }
+
 }

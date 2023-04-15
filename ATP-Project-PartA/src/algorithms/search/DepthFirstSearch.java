@@ -30,26 +30,33 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
         is_visited.put(start_position, true);
         AState goal_state = searchable.getGoalState();
         Integer goal_position = ((Position)goal_state.getPosition()).getRowIndex()*columns + ((Position) goal_state.getPosition()).getColumnIndex();
-        DFS(searchable, start_state, (Position) goal_state.getPosition(), states);
-        return new Solution(states);
+        try{
+            DFS(searchable, start_state, (Position) goal_state.getPosition(), states);}
+        catch (Exception e){
+
+        }
+        solution =  new Solution(states);
+        return solution;
 
     }
 
-    public int DFS(ISearchable searchable, AState cur_state, Position goal, ArrayList<AState> solution){
+    public void DFS(ISearchable searchable, AState cur_state, Position goal, ArrayList<AState> solution){
 
         if(cur_state.getPosition().equals(goal)){
-            return 0;
+            throw new RuntimeException();
         }
-
+        Position next_position;
+        Integer position;
         for(AState state : searchable.getAllPossibleStates(cur_state)){
-            Position next_position = (Position) state.getPosition();
-            Integer position = next_position.getRowIndex()*searchable.getSize()[1] + next_position.getColumnIndex();
+            next_position = (Position) state.getPosition();
+            position = next_position.getRowIndex()*searchable.getSize()[1] + next_position.getColumnIndex();
             if(!is_visited.get(position)){
                 solution.add(state);
                 is_visited.put(position, true);
-                return DFS(searchable, state, goal, solution);
+                DFS(searchable, state, goal, solution);
             }
         }
+
     }
 
     @Override

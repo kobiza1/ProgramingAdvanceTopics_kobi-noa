@@ -27,4 +27,13 @@ public class MazeState extends AState{
         return getPosition().toString();
     }
 
+    public void add_to_cost(int cost_to_add){
+        this.cost += cost_to_add;
+    }
+
+    public void set_cost(int new_cost){
+        this.cost = new_cost;
+    }
+
+
 }
