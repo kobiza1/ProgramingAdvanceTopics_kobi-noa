@@ -12,10 +12,11 @@ public class RunSearchOnMaze {
     public static void main(String[] args) {
         IMazeGenerator mg = new MyMazeGenerator();
         Maze maze = mg.generate(1000, 1000);
+        //maze.Print();
         SearchableMaze searchableMaze = new SearchableMaze(maze);
-        //solveProblem(searchableMaze, new BreadthFirstSearch());
-        solveProblem(searchableMaze, new DepthFirstSearch());
-        //solveProblem(searchableMaze, new BestFirstSearch());
+        solveProblem(searchableMaze, new BreadthFirstSearch());
+        //solveProblem(searchableMaze, new DepthFirstSearch());
+        solveProblem(searchableMaze, new BestFirstSearch());
     }
     private static void solveProblem(ISearchable domain, ISearchingAlgorithm searcher) {
         long start_time = System.currentTimeMillis();
@@ -23,14 +24,15 @@ public class RunSearchOnMaze {
         Solution solution = searcher.solve(domain);
         long end_time = System.currentTimeMillis();
         System.out.println(end_time-start_time);
-        System.out.println(domain.getStartState().toString() + domain.getGoalState().toString());
         System.out.println(String.format("'%s' algorithm - nodes evaluated: %s", searcher.getName(), searcher.getNumberOfNodesEvaluated()));
         //Printing Solution Path
                 System.out.println("Solution path:");
+        System.out.println(domain.getStartState().toString() + domain.getGoalState().toString());
         ArrayList<AState> solutionPath = solution.getSolutionPath();
-        /*for (int i = 0; i < solutionPath.size(); i++) {
-            System.out.println(String.format("%s. %s",i,solutionPath.get(i)));
-        }*/
+//        for (int i = 0; i < solutionPath.size(); i++) {
+//            System.out.println(String.format("%s. %s",i,solutionPath.get(i)));
+//        }
+        System.out.println(solutionPath.size());
     }
 //        IMazeGenerator mg = new MyMazeGenerator();
 //        long maze = mg.measureAlgorithmTimeMillis(1000, 1000);

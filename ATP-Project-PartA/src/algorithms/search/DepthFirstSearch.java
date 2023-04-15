@@ -28,6 +28,7 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
         states.add(start_state);
         Integer start_position = ((Position)start_state.getPosition()).getRowIndex()*columns + ((Position) start_state.getPosition()).getColumnIndex();
         is_visited.put(start_position, true);
+        nodesEvaluated++;
         AState goal_state = searchable.getGoalState();
         Integer goal_position = ((Position)goal_state.getPosition()).getRowIndex()*columns + ((Position) goal_state.getPosition()).getColumnIndex();
         try{
@@ -51,6 +52,7 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
             next_position = (Position) state.getPosition();
             position = next_position.getRowIndex()*searchable.getSize()[1] + next_position.getColumnIndex();
             if(!is_visited.get(position)){
+                nodesEvaluated++;
                 solution.add(state);
                 is_visited.put(position, true);
                 DFS(searchable, state, goal, solution);

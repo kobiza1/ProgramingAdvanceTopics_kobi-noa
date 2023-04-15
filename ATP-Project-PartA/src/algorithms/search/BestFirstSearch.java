@@ -9,12 +9,15 @@ import java.util.*;
 public class BestFirstSearch extends BreadthFirstSearch{
 
     public BestFirstSearch(){
-        toVisit = new PriorityQueue<>();
+        Comparator<AState> comp = new AStateComparator();
+        toVisit = new PriorityQueue<>(comp);
     }
 
-    @Override
-    public Solution solve(ISearchable searchable) {
-        return null;
+
+    public AState addCost(AState currState){
+        AState cameFrom = currState.cameFrom;
+        currState.add_to_cost(cameFrom.cost);
+        return currState;
     }
 
     @Override
