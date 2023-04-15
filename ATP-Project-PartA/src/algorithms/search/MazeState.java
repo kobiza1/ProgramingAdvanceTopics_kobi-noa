@@ -12,7 +12,6 @@ public class MazeState extends AState{
         super(cost, position, cameFrom, key);
     }
 
-    @Override
     public Position getPosition() {
         return (Position)state;
     }
