@@ -14,10 +14,6 @@ public abstract class AState {
         this.key = _key;
     }
 
-    public Object getPosition() {
-        return state;
-    }
-
     public AState getCameFrom() {
         return cameFrom;
     }

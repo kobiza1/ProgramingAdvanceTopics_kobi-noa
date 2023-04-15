@@ -26,6 +26,7 @@ public class MyMazeGenerator extends AMazeGenerator{
             Position startPosition = new Position(0, 0);
             my_maze.setStartPosition(startPosition);
             my_maze.set_value_of_position(startPosition.getRowIndex(), startPosition.getColumnIndex(), 0); //0 in Start position
+            //my_maze.setGoalPosition(new Position(number_of_rows -1, number_of_columns - 1));
             this.add_wall_to_list(startPosition);
 
             primAlgo();
@@ -52,7 +53,11 @@ public class MyMazeGenerator extends AMazeGenerator{
 
                 }
             }
+
             my_maze.setGoalPosition(GoalPosition);
+            //if(my_maze.get_value_of_position(number_of_rows -1, number_of_columns - 1) == 1){
+               // primAlgo();
+            //}
         }
 
         private int[][] initialize_with_ones() {
