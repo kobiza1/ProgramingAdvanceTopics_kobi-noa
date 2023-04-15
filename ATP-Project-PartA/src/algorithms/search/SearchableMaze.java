@@ -22,6 +22,11 @@ public class SearchableMaze implements ISearchable{
         return new MazeState(2147483647, goal_position);
     }
 
+    public Integer[] getSize(){
+        Integer[] size = {m_maze.getRows_number(), m_maze.getColumns_number()};
+        return size;
+    }
+
     public List<AState> getAllPossibleStates(AState m_state){
 
         List<AState> all_possible_states = new ArrayList<>();

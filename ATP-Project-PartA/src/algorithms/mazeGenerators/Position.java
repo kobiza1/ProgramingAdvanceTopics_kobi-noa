@@ -3,7 +3,6 @@ package algorithms.mazeGenerators;
 public class Position {
     int RowIndex;
     int ColumnIndex;
-
     boolean visited;
 
     public Position(int rowIndex, int columnIndex){
@@ -31,6 +30,7 @@ public class Position {
         this.visited = true;
     }
 
+    @Override
     public boolean equals(Object position1) {
         if(!(position1 instanceof Position)){
             return false;
