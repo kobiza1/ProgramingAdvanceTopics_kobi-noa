@@ -10,10 +10,13 @@ public class BestFirstSearch extends BreadthFirstSearch{
 
     public BestFirstSearch(){}
 
-    public AState addCost(AState currState){
+    public void addCost(AState currState){
         AState cameFrom = currState.getCameFrom();
         currState.add_to_cost(cameFrom.getCost());
-        return currState;
+    }
+
+    public int get_after_cost_add(AState curState, AState nextState){
+        return curState.getCost()+nextState.getCost();
     }
 
     @Override
