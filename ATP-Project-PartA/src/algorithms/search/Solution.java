@@ -9,7 +9,6 @@ public class Solution {
     public Solution(ArrayList<AState> path){
         solution=path;
     }
-
     public ArrayList<AState> getSolutionPath() {
         return solution;
     }

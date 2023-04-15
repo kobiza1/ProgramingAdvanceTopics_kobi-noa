@@ -13,7 +13,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
     public Solution solve(ISearchable searchable) {
         Comparator<AState> comp = new AStateComparator();
         Queue<AState> toVisit = new PriorityQueue<>(comp);
-        HashMap<Integer,AState> visited = new HashMap<Integer, AState>();
+        HashMap<Integer,AState> visited = new HashMap<>();
         List<AState> possibleStates;
 
         AState startState = searchable.getStartState();
@@ -35,12 +35,12 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
             possibleStates = searchable.getAllPossibleStates(currState);
             AState nextStat;
 
-            for(int i=0; i<possibleStates.size(); i++){
+            for (AState possibleState : possibleStates) {
 
-                nextStat = possibleStates.get(i);
+                nextStat = possibleState;
                 Integer key = nextStat.getKey();
 
-                if(!visited.containsKey(key)){
+                if (!visited.containsKey(key)) {
                     visited.put(key, nextStat);
                     addCost(nextStat);
                     toVisit.add(nextStat);
@@ -62,7 +62,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
         ArrayList<AState> path = new ArrayList<>();
         path.add(goalState);
         AState currState = goalState.getCameFrom();
-        while (!currState.getPosition().equals(stateState.getPosition())){
+        while (!Objects.equals(currState.getKey(), stateState.getKey())){
             path.add(currState);
             currState = currState.getCameFrom();
         }

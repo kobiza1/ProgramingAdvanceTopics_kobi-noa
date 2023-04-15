@@ -23,7 +23,6 @@ public class Maze {
     public Position getStartPosition(){
         return StartPosition;
     }
-
     public Position getGoalPosition(){
         return GoalPosition;
     }
@@ -31,20 +30,11 @@ public class Maze {
     public int getRows_number() {
         return rows_number;
     }
-
     public int getColumns_number() {
         return columns_number;
     }
-    public boolean isValid(int row, int column){
-        if(row<0 || row>=rows_number)
-            return false;
-        else if(column<0 || column>=columns_number)
-            return false;
 
-        return true;
-    }
-
-    public void Print(){
+    public void print(){
         for(int i=0; i<rows_number; i++){
             System.out.print("[");
             for (int j=0; j<columns_number; j++){
@@ -61,7 +51,6 @@ public class Maze {
             System.out.println("]");
         }
     }
-
 
     public void set_value_of_position(int row, int col, int val){
         if(row >=0 && row < maze_board.length && col >=0 && col < maze_board[0].length)
@@ -82,8 +71,6 @@ public class Maze {
         }else{
             return -1;
         }
-
     }
-
 
 }

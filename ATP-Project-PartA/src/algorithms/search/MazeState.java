@@ -2,10 +2,7 @@ package algorithms.search;
 
 import algorithms.mazeGenerators.Position;
 
-import java.util.Comparator;
-
 public class MazeState extends AState{
-
 
     public MazeState(int cost, Position position, Integer key) {
         super(cost, position, null, key);
