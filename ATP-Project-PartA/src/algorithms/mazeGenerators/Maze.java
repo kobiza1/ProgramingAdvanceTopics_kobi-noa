@@ -44,14 +44,21 @@ public class Maze {
         return true;
     }
 
-
     public void Print(){
-        System.out.println("S="+getStartPosition()+" D="+getGoalPosition());
         for(int i=0; i<rows_number; i++){
+            System.out.print("[");
             for (int j=0; j<columns_number; j++){
-                System.out.print(maze_board[i][j] + "");
+                if(getStartPosition().getRowIndex()==i && getStartPosition().getColumnIndex()==j)
+                    System.out.print("S");
+                else if(getGoalPosition().getRowIndex()==i && getGoalPosition().getColumnIndex()==j)
+                    System.out.print("E");
+                else
+                    System.out.print(maze_board[i][j]);
+
+                if(j!=columns_number-1)
+                    System.out.print(", ");
             }
-            System.out.println();
+            System.out.println("]");
         }
     }
 

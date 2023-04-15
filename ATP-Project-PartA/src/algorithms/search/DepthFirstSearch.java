@@ -10,4 +10,5 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
     public String getName() {
         return "DepthFirstSearch";
     }
+
 }

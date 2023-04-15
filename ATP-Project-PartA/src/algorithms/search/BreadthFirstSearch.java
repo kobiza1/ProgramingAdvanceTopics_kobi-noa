@@ -1,8 +1,7 @@
 package algorithms.search;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+
 
 public class BreadthFirstSearch extends ASearchingAlgorithm{
 
@@ -14,8 +13,8 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
 
     @Override
     public Solution solve(ISearchable searchable) {
-        List<AState> visited = new LinkedList<>();
-        List<AState> possibleStates = new LinkedList<>();
+        ArrayList<AState> visited = new ArrayList<>();
+        List<AState> possibleStates;
 
         AState startState = searchable.getStartState();
         AState goalState = searchable.getGoalState();
@@ -24,25 +23,40 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
         toVisit.add(startState);
 
         while (!toVisit.isEmpty()){
-            AState currState = toVisit.poll();
+            AState currState = toVisit.remove();
 
-            if(currState == goalState) {
+            if(currState.getPosition().equals(goalState.getPosition())) {
                 solution = new Solution(visited);
+                return solution;
             }
 
-            possibleStates = searchable.getAllPossibleStats(currState);
+
+
+            possibleStates = searchable.getAllPossibleStates(currState);
             AState nextStat;
+            boolean exist = false;
             for(int i=0; i<possibleStates.size(); i++){
                 nextStat = possibleStates.get(i);
-                if(!visited.contains(nextStat)) {
+
+                for (int j=0; j<visited.size(); j++) {
+                    if(visited.get(j).getPosition().equals(nextStat.getPosition())) {
+                        exist = true;
+                        break;
+                    }
+                }
+
+                if (!exist) {
                     visited.add(nextStat);
                     toVisit.add(nextStat);
                 }
+                exist = false;
             }
+
+
 
         }
 
-        List<AState> noPath = new LinkedList<>();
+        ArrayList<AState> noPath = new ArrayList<>();
         return new Solution(noPath);
     }
 

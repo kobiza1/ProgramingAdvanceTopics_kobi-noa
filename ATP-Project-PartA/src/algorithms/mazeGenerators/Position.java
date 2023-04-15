@@ -30,4 +30,12 @@ public class Position {
     public void  set_visited(){
         this.visited = true;
     }
+
+    public boolean equals(Object position1) {
+        if(!(position1 instanceof Position)){
+            return false;
+        }
+        Position p1 = (Position) position1;
+        return (this.RowIndex == p1.getRowIndex() && this.ColumnIndex == p1.getColumnIndex());
+    }
 }
