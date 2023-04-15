@@ -7,12 +7,12 @@ import java.util.Comparator;
 public class MazeState extends AState{
 
 
-    public MazeState(int cost, Position position) {
-        super(cost, position, null);
+    public MazeState(int cost, Position position, Integer key) {
+        super(cost, position, null, key);
     }
 
-    public MazeState(int cost, Position position, MazeState cameFrom) {
-        super(cost, position, cameFrom);
+    public MazeState(int cost, Position position, MazeState cameFrom, Integer key) {
+        super(cost, position, cameFrom, key);
     }
 
     @Override
@@ -28,7 +28,6 @@ public class MazeState extends AState{
     public String toString(){
         return getPosition().toString();
     }
-
 }
 
 

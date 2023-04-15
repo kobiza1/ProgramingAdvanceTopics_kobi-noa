@@ -15,11 +15,12 @@ public class SearchableMaze implements ISearchable{
 
     public AState getStartState(){
         Position start_position = m_maze.getStartPosition();
-        return new MazeState(0, start_position);
+        return new MazeState(0, start_position,0);
     }
     public AState getGoalState(){
         Position goal_position = m_maze.getGoalPosition();
-        return new MazeState(2147483647, goal_position);
+        Integer key = goal_position.getRowIndex()*m_maze.getColumns_number() + goal_position.getColumnIndex();
+        return new MazeState(2147483647, goal_position, key);
     }
 
     public Integer[] getSize(){
@@ -40,45 +41,53 @@ public class SearchableMaze implements ISearchable{
         if(column != (maze_board[0].length - 1) && row != (maze_board.length-1) && maze_board[row+1][column+1] == 0
                 && (maze_board[row+1][column] == 0 || maze_board[row][column+1] == 0)){
             next_position = new Position(row + 1, column + 1);
-            all_possible_states.add(new MazeState(15, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(15, next_position, cur_state, key));
         }
         // case 2 : move right and up (slant)
         if(column != (maze_board[0].length - 1) && row != 0 && maze_board[row-1][column+1] == 0
                 && (maze_board[row-1][column] == 0 || maze_board[row][column+1] == 0)){
             next_position = new Position(row - 1, column + 1);
-            all_possible_states.add(new MazeState(15, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(15, next_position, cur_state, key));
         }
         // case 3 : move left and up (slant)
         if(column != 0 && row != 0 && maze_board[row-1][column-1] == 0
                 && (maze_board[row-1][column] == 0 || maze_board[row][column-1] == 0)){
             next_position = new Position(row - 1, column - 1);
-            all_possible_states.add(new MazeState(15, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(15, next_position, cur_state, key));
         }
         // case 4 : move left and down (slant)
         if(column != 0 && row != (maze_board.length-1) && maze_board[row+1][column-1] == 0
                 && (maze_board[row+1][column] == 0 || maze_board[row][column-1] == 0)){
             next_position = new Position(row + 1, column - 1);
-            all_possible_states.add(new MazeState(15, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(15, next_position, cur_state, key));
         }
         // case 5 : move right
         if((column != (maze_board[0].length - 1)) && maze_board[row][column+1] == 0){
             next_position = new Position(row, column+1);
-            all_possible_states.add(new MazeState(10, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(10, next_position, cur_state, key));
         }
         // case 6 : move left
         if(column != 0 && maze_board[row][column-1] == 0){
             next_position = new Position(row, column-1);
-            all_possible_states.add(new MazeState(10, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(10, next_position, cur_state, key));
         }
         // case 7 : move up
         if(row != 0 && maze_board[row-1][column] == 0){
             next_position = new Position(row - 1, column);
-            all_possible_states.add(new MazeState(10, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(10, next_position, cur_state, key));
         }
         // case 8 : move down
         if(row != (maze_board.length - 1) && maze_board[row+1][column] == 0){
             next_position = new Position(row + 1, column);
-            all_possible_states.add(new MazeState(10, next_position, cur_state));
+            Integer key = next_position.getRowIndex()*m_maze.getColumns_number() + next_position.getColumnIndex();
+            all_possible_states.add(new MazeState(10, next_position, cur_state, key));
         }
 
         return all_possible_states;

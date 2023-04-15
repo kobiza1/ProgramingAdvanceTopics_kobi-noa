@@ -7,31 +7,26 @@ import java.util.*;
 
 public class BreadthFirstSearch extends ASearchingAlgorithm{
 
-    protected Queue<AState> toVisit;
-
-    public BreadthFirstSearch(){
-        Comparator<AState> comp = new AStateComparator();
-        toVisit = new PriorityQueue<>(comp);
-    }
+    public BreadthFirstSearch(){}
 
     @Override
     public Solution solve(ISearchable searchable) {
+        Comparator<AState> comp = new AStateComparator();
+        Queue<AState> toVisit = new PriorityQueue<>(comp);
         HashMap<Integer,AState> visited = new HashMap<Integer, AState>();
         List<AState> possibleStates;
-        Integer[] size = searchable.getSize();
-        int colNumber = size[1];
 
         AState startState = searchable.getStartState();
         AState goalState = searchable.getGoalState();
 
         startState.set_cost(0);
-        visited.put(0,startState);
+        visited.put(startState.getKey(),startState);
         toVisit.add(startState);
 
         while (!toVisit.isEmpty()){
             AState currState = toVisit.remove();
 
-            if(currState.getPosition().equals(goalState.getPosition())) {
+            if(Objects.equals(currState.getKey(), goalState.getKey())) {
                 solution = backtrackPath(startState,currState);
                 nodesEvaluated = visited.size();
                 return solution;
@@ -43,8 +38,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
             for(int i=0; i<possibleStates.size(); i++){
 
                 nextStat = possibleStates.get(i);
-                Position p = (Position)nextStat.getPosition();
-                Integer key = p.getRowIndex()*colNumber + p.getColumnIndex();
+                Integer key = nextStat.getKey();
 
                 if(!visited.containsKey(key)){
                     visited.put(key, nextStat);
@@ -59,8 +53,8 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
     }
 
     public AState addCost(AState currState){
-        AState cameFrom = currState.cameFrom;
-        currState.set_cost(cameFrom.cost + 1);
+        AState cameFrom = currState.getCameFrom();
+        currState.set_cost(cameFrom.getCost() + 1);
         return currState;
     }
 

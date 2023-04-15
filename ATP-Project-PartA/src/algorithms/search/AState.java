@@ -1,19 +1,17 @@
 package algorithms.search;
 
-import algorithms.mazeGenerators.Position;
-
-import java.util.Comparator;
-
 public abstract class AState {
 
     protected Object state;
     protected AState cameFrom;
     protected int cost;
+    protected Integer key;
 
-    public AState(int _cost, Object _state, AState _cameFrom){
+    public AState(int _cost, Object _state, AState _cameFrom, Integer _key){
         this.cost = _cost;
         this.cameFrom = _cameFrom;
         this.state = _state;
+        this.key = _key;
     }
 
     public Object getPosition() {
@@ -32,5 +30,16 @@ public abstract class AState {
         this.cost = new_cost;
     }
 
+    public Integer getKey() {
+        return key;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public Object getState() {
+        return state;
+    }
 }
 

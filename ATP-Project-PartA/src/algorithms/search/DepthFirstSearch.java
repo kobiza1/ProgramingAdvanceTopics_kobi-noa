@@ -16,26 +16,15 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
     @Override
     public Solution solve(ISearchable searchable) {
         ArrayList<AState> states = new ArrayList<>();
-        int columns = searchable.getSize()[1];
-        int rows = searchable.getSize()[0];
-        for(int i=0; i<rows; i++){
-            for (int j=0; j<columns; j++){
-                Integer cell_number = i*columns + j;
-                is_visited.put(cell_number, false);
-            }
-        }
+
         AState start_state = searchable.getStartState();
         states.add(start_state);
-        Integer start_position = ((Position)start_state.getPosition()).getRowIndex()*columns + ((Position) start_state.getPosition()).getColumnIndex();
-        is_visited.put(start_position, true);
+        is_visited.put(start_state.getKey(), true);
         nodesEvaluated++;
         AState goal_state = searchable.getGoalState();
-        Integer goal_position = ((Position)goal_state.getPosition()).getRowIndex()*columns + ((Position) goal_state.getPosition()).getColumnIndex();
         try{
             DFS(searchable, start_state, (Position) goal_state.getPosition(), states);}
-        catch (Exception e){
-
-        }
+        catch (Exception e){}
         solution =  new Solution(states);
         return solution;
 
@@ -44,21 +33,18 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
     public void DFS(ISearchable searchable, AState cur_state, Position goal, ArrayList<AState> solution){
 
         if(cur_state.getPosition().equals(goal)){
+            nodesEvaluated = is_visited.size();;
             throw new RuntimeException();
         }
-        Position next_position;
-        Integer position;
+
         for(AState state : searchable.getAllPossibleStates(cur_state)){
-            next_position = (Position) state.getPosition();
-            position = next_position.getRowIndex()*searchable.getSize()[1] + next_position.getColumnIndex();
-            if(!is_visited.get(position)){
-                nodesEvaluated++;
-                solution.add(state);
-                is_visited.put(position, true);
-                DFS(searchable, state, goal, solution);
+            Integer key = state.getKey();
+            if(!is_visited.containsKey(key)) {
+                    solution.add(state);
+                    is_visited.put(key, true);
+                    DFS(searchable, state, goal, solution);
             }
         }
-
     }
 
     @Override
