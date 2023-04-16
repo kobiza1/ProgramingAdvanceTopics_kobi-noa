@@ -54,6 +54,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
         }
         ArrayList<AState> noPath = new ArrayList<>();
         solution = new Solution(noPath);
+        nodesEvaluated = visited.size();
         return solution;
     }
 

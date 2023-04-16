@@ -18,7 +18,7 @@ public class MyMazeGenerator extends AMazeGenerator{
             number_of_columns = columns_num;
 
             randomizer = new Random();
-            walls_list = new ArrayList();
+            walls_list = new ArrayList<>();
 
             int[][] ones_maze_board = initialize_with_ones();
             my_maze = new Maze(ones_maze_board, rows_num, columns_num);
