@@ -39,7 +39,9 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
                 sol.pop();
             }
         }
-        sol.add(cur_state);
+        if(sol.size() != 0){
+            sol.add(cur_state);
+        }
         states =  new ArrayList(sol);
         solution = new Solution(states);
         return solution;

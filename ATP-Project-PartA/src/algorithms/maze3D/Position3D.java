@@ -7,6 +7,18 @@ public class Position3D {
     private int rowIndex;
     private int columnIndex;
 
+    public void setDepthIndex(int depthIndex) {
+        this.depthIndex = depthIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
+    }
+
     public Position3D(int depth, int row, int col) {
         depthIndex = depth;
         rowIndex = row;

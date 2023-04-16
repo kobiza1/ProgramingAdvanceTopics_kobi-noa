@@ -53,7 +53,7 @@ public class Maze {
     }
 
     public void set_value_of_position(int row, int col, int val){
-        if(row >=0 && row < maze_board.length && col >=0 && col < maze_board[0].length)
+        if(val < 2 && val >=0 && row >=0 && row < maze_board.length && col >=0 && col < maze_board[0].length)
             this.maze_board[row][col] = val;
     }
 

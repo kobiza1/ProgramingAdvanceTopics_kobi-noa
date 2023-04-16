@@ -11,4 +11,8 @@ public abstract class AMaze3DGenerator implements IMazeGenerator3D{
         long end_time = System.currentTimeMillis();
         return (end_time-start_time);
     }
+
+    public boolean check_inputs(int d, int r, int c){
+        return (d <= 0 || r <= 0 || c <= 0);
+    }
 }

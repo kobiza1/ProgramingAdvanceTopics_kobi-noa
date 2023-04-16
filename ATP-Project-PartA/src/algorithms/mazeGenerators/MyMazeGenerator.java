@@ -10,8 +10,8 @@ public class MyMazeGenerator extends AMazeGenerator{
         @Override
         public Maze generate(int rows_num, int columns_num) {
 
-            if (rows_num <= 0 || columns_num <= 0) {
-               return null;
+            if (check_inputs(rows_num, columns_num)) {
+               return my_maze;
             }
 
             number_of_rows = rows_num;
@@ -26,7 +26,7 @@ public class MyMazeGenerator extends AMazeGenerator{
             Position startPosition = new Position(0, 0);
             my_maze.setStartPosition(startPosition);
             my_maze.set_value_of_position(startPosition.getRowIndex(), startPosition.getColumnIndex(), 0); //0 in Start position
-            //my_maze.setGoalPosition(new Position(number_of_rows -1, number_of_columns - 1));
+            my_maze.setGoalPosition(new Position(number_of_rows -1, number_of_columns - 1));
             this.add_wall_to_list(startPosition);
 
             primAlgo();
@@ -40,7 +40,8 @@ public class MyMazeGenerator extends AMazeGenerator{
              * add all the walls that connected to this cell
              *
              */
-            Position GoalPosition = new Position(0, 0);
+            boolean maze_done = false;
+            Position GoalPosition = new Position(number_of_rows - 1, number_of_columns - 1);
 
             while(!walls_list.isEmpty()){
 
@@ -48,16 +49,34 @@ public class MyMazeGenerator extends AMazeGenerator{
 
                 if(num_of_neighbors(cur_position) == 1){
                     my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
-                    GoalPosition = cur_position;
+                    //GoalPosition = cur_position;
                     add_wall_to_list(cur_position);
 
                 }
             }
 
             my_maze.setGoalPosition(GoalPosition);
-            //if(my_maze.get_value_of_position(number_of_rows -1, number_of_columns - 1) == 1){
-               // primAlgo();
-            //}
+            if(my_maze.get_value_of_position(number_of_rows -1, number_of_columns - 1) == 1){
+                my_maze.set_value_of_position(my_maze.getGoalPosition().getRowIndex(), my_maze.getGoalPosition().getColumnIndex(), 0);
+                this.add_wall_to_list(my_maze.getGoalPosition());
+                while(!walls_list.isEmpty()){
+
+                    Position cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
+
+                    if(num_of_neighbors(cur_position) == 1){
+                        if(my_maze.get_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex()) == 0){
+                            maze_done = true;
+                            break;
+                        }
+                        my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
+                        //GoalPosition = cur_position;
+                        add_wall_to_list(cur_position);
+                    }
+                }
+                if(!maze_done){
+                    primAlgo();
+                }
+            }
         }
 
         private int[][] initialize_with_ones() {
@@ -130,5 +149,7 @@ public class MyMazeGenerator extends AMazeGenerator{
                 return (col <= number_of_columns - 1);
             }
         }
-
 }
+
+
+

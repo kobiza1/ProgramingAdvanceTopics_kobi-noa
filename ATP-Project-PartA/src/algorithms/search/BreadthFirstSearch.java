@@ -11,6 +11,11 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
 
     @Override
     public Solution solve(ISearchable searchable) {
+        ArrayList<AState> noPath = new ArrayList<>();
+        if(check_inputs(searchable)){
+            solution =  new Solution(noPath);
+            return solution;
+        }
         Comparator<AState> comp = new AStateComparator();
         Queue<AState> toVisit = new PriorityQueue<>(comp);
         HashMap<Integer,AState> visited = new HashMap<>();
@@ -52,7 +57,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
                 }
             }
         }
-        ArrayList<AState> noPath = new ArrayList<>();
+
         solution = new Solution(noPath);
         nodesEvaluated = visited.size();
         return solution;

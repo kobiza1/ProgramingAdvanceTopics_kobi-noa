@@ -51,7 +51,7 @@ public class SearchableMaze3D implements ISearchable {
         }
 
         // Down
-        if(row != columnNumber - 1 && map3D[depth][row+1][col] == 0) {
+        if(row != rowNumber - 1 && map3D[depth][row+1][col] == 0) {
             nextPosition = new Position3D(depth, row+1, col);
             key = getKey(nextPosition);
             all_possible_states.add(new Maze3DState(1, nextPosition, currState, key));
@@ -65,7 +65,7 @@ public class SearchableMaze3D implements ISearchable {
         }
 
         // Right
-        if(col != rowNumber - 1 && map3D[depth][row][col+1] == 0){
+        if(col != columnNumber - 1 && map3D[depth][row][col+1] == 0){
             nextPosition = new Position3D(depth, row,col+1);
             key = getKey(nextPosition);
             all_possible_states.add(new Maze3DState(1, nextPosition, currState, key));

@@ -12,4 +12,8 @@ public abstract class AMazeGenerator implements IMazeGenerator {
         long end_time = System.currentTimeMillis();
         return (end_time-start_time);
     }
+
+    public boolean check_inputs(int rows, int cols){
+        return (rows <= 0 || cols <= 0);
+    }
 }

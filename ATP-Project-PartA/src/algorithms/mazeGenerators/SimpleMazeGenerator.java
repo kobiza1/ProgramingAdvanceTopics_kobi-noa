@@ -6,6 +6,9 @@ public class SimpleMazeGenerator extends AMazeGenerator{
 
     @Override
     public Maze generate(int columns_num, int rows_num) {
+        if (check_inputs(rows_num, columns_num)) {
+            return null;
+        }
         int zeros_or_ones, random_break;
         Random r = new Random();
         int [][] maze = new int[rows_num][columns_num];
