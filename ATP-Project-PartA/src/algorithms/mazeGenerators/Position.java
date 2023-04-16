@@ -1,9 +1,8 @@
 package algorithms.mazeGenerators;
 
 public class Position {
-    int RowIndex;
-    int ColumnIndex;
-    boolean visited;
+    private int RowIndex;
+    private int ColumnIndex;
 
     public Position(int rowIndex, int columnIndex){
         RowIndex=rowIndex;
@@ -20,14 +19,6 @@ public class Position {
 
     public String toString(){
         return "{"+RowIndex+","+ColumnIndex+"}";
-    }
-
-    public boolean gotVisited(){
-        return visited;
-    }
-
-    public void  set_visited(){
-        this.visited = true;
     }
 
     @Override
