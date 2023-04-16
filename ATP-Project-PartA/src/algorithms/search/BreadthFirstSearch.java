@@ -40,10 +40,15 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
                 nextStat = possibleState;
                 Integer key = nextStat.getKey();
 
+
                 if (!visited.containsKey(key)) {
                     visited.put(key, nextStat);
                     addCost(nextStat);
                     toVisit.add(nextStat);
+                }
+                else if(visited.get(key).getCost() > get_after_cost_add(currState, nextStat)){
+                    addCost(nextStat);
+                    visited.put(key, nextStat);
                 }
             }
         }
@@ -52,10 +57,13 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
         return solution;
     }
 
-    public AState addCost(AState currState){
+    public void addCost(AState currState){
         AState cameFrom = currState.getCameFrom();
         currState.set_cost(cameFrom.getCost() + 1);
-        return currState;
+    }
+
+    public int get_after_cost_add(AState curState, AState nextState){
+        return curState.getCost()+1;
     }
 
     public Solution backtrackPath(AState stateState,AState goalState){
