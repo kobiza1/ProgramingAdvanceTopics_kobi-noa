@@ -1,5 +1,7 @@
 package algorithms.mazeGenerators;
 
+import algorithms.search.*;
+
 import java.util.*;
 public class MyMazeGenerator extends AMazeGenerator{
         private ArrayList<Position> walls_list;
@@ -9,7 +11,6 @@ public class MyMazeGenerator extends AMazeGenerator{
 
         @Override
         public Maze generate(int rows_num, int columns_num) {
-
             if (check_inputs(rows_num, columns_num)) {
                return my_maze;
             }
@@ -28,8 +29,15 @@ public class MyMazeGenerator extends AMazeGenerator{
             my_maze.set_value_of_position(startPosition.getRowIndex(), startPosition.getColumnIndex(), 0); //0 in Start position
             my_maze.setGoalPosition(new Position(number_of_rows -1, number_of_columns - 1));
             this.add_wall_to_list(startPosition);
-
             primAlgo();
+
+            SearchableMaze searchableMaze = new SearchableMaze(my_maze);
+            BestFirstSearch bestFS = new BestFirstSearch();
+            Solution solution = bestFS.solve(searchableMaze);
+            ArrayList<AState> solutionPath = solution.getSolutionPath();
+            if(solutionPath.size() == 0){
+                generate(rows_num, columns_num);
+            }
 
             return my_maze;
         }
@@ -49,7 +57,6 @@ public class MyMazeGenerator extends AMazeGenerator{
 
                 if(num_of_neighbors(cur_position) == 1){
                     my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
-                    //GoalPosition = cur_position;
                     add_wall_to_list(cur_position);
 
                 }
@@ -69,7 +76,6 @@ public class MyMazeGenerator extends AMazeGenerator{
                             break;
                         }
                         my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
-                        //GoalPosition = cur_position;
                         add_wall_to_list(cur_position);
                     }
                 }
