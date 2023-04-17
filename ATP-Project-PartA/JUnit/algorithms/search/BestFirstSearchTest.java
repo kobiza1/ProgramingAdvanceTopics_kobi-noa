@@ -26,26 +26,7 @@ class BestFirstSearchTest {
         assertTrue(check2);
     }
 
-    @Test
-    void addCost() {
-        AState startState = searchableMaze.getStartState();
-        List<AState> nextStates = searchableMaze.getAllPossibleStates(startState);
-        int cost_before, cost_after;
 
-        for (AState nextState : nextStates){
-            cost_before = nextState.getCost();
-            bestFirstSearch.addCost(nextState);
-            cost_after = nextState.getCost();
-            assertEquals(cost_before, cost_after);
-        }
-        List<AState> evenMoreNextState = searchableMaze.getAllPossibleStates(nextStates.get(0));
-        for (AState nextState : evenMoreNextState){
-            cost_before = nextState.getCost();
-            bestFirstSearch.addCost(nextState);
-            cost_after = nextState.getCost();
-            assertFalse(cost_before == cost_after);
-        }
-    }
 
     @Test
     void getName() {

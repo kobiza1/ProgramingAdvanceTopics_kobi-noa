@@ -7,7 +7,12 @@ import java.util.*;
 
 public class BreadthFirstSearch extends ASearchingAlgorithm{
 
-    public BreadthFirstSearch(){}
+    Queue<AState> toVisit;
+    boolean breadthOrBest;
+    public BreadthFirstSearch(){
+        toVisit = new LinkedList<>();
+        breadthOrBest = false;
+    }
 
     @Override
     public Solution solve(ISearchable searchable) {
@@ -16,8 +21,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
             solution =  new Solution(noPath);
             return solution;
         }
-        Comparator<AState> comp = new AStateComparator();
-        Queue<AState> toVisit = new PriorityQueue<>(comp);
+
         HashMap<Integer,AState> visited = new HashMap<>();
         List<AState> possibleStates;
 
@@ -38,22 +42,20 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
             }
 
             possibleStates = searchable.getAllPossibleStates(currState);
-            AState nextStat;
+            AState nextState;
 
             for (AState possibleState : possibleStates) {
 
-                nextStat = possibleState;
-                Integer key = nextStat.getKey();
+                nextState = possibleState;
+                Integer key = nextState.getKey();
 
 
                 if (!visited.containsKey(key)) {
-                    visited.put(key, nextStat);
-                    addCost(nextStat);
-                    toVisit.add(nextStat);
+                    visited.put(key, nextState);
+                    toVisit.add(nextState);
                 }
-                else if(visited.get(key).getCost() > get_after_cost_add(currState, nextStat)){
-                    addCost(nextStat);
-                    visited.put(key, nextStat);
+                else if(visited.get(key).getCost() > possibleState.getCost() && breadthOrBest){
+                    visited.put(key, nextState);
                 }
             }
         }
