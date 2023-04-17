@@ -9,7 +9,7 @@ import java.util.*;
 public class BestFirstSearch extends BreadthFirstSearch{
 
     public BestFirstSearch(){
-        Comparator<AState> comp = new AStateComparator();
+        Comparator<AState> comp =  new AState.AStateComparator();
         toVisit = new PriorityQueue<>(comp);
         breadthOrBest = true;
     }

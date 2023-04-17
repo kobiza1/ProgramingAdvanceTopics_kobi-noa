@@ -53,44 +53,21 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
          * add all the walls that connected to this cell
          *
          */
-        boolean maze_done = false;
         Position3D GoalPosition = new Position3D(0,rows - 1, columns - 1);
+        my_maze.set_value_of_position(GoalPosition, 0);
         Position3D cur_position = startPosition;
 
         while(!walls_list.isEmpty() && !cur_position.equals(GoalPosition)){
 
             cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
 
-            if(num_of_neighbors(cur_position) == 1){
+            if(num_of_neighbors(cur_position) < 3){
                 my_maze.set_value_of_position(cur_position, 0);
-                //GoalPosition = cur_position;
                 add_wall_to_list(cur_position);
 
             }
         }
 
-        my_maze.setGoalPosition(GoalPosition);
-        if(my_maze.get_value_of_position(GoalPosition) == 1){
-            my_maze.set_value_of_position(my_maze.getGoalPosition(), 0);
-            this.add_wall_to_list(my_maze.getGoalPosition());
-            while(!walls_list.isEmpty()){
-
-                cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
-
-                if(num_of_neighbors(cur_position) == 1){
-                    if(my_maze.get_value_of_position(cur_position) == 0){
-                        maze_done = true;
-                        break;
-                    }
-                    my_maze.set_value_of_position(cur_position,0);
-                    //GoalPosition = cur_position;
-                    add_wall_to_list(cur_position);
-                }
-            }
-            if(!maze_done){
-                primAlgo(rows, columns, startPosition);
-            }
-        }
     }
 
     private int[][][] initialize_with_ones() {

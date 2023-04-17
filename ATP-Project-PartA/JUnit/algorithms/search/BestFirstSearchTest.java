@@ -16,7 +16,7 @@ class BestFirstSearchTest {
     BestFirstSearch bestFirstSearch = new BestFirstSearch();
 
     @Test
-    void solve(){
+    void solve_time_check(){
         long start_time = System.currentTimeMillis();
         Solution solution = bestFirstSearch.solve(searchableMaze);
         long end_time = System.currentTimeMillis();
@@ -26,7 +26,10 @@ class BestFirstSearchTest {
         assertTrue(check2);
     }
 
-
+    void solve_wrong_input(){
+        Solution solution = bestFirstSearch.solve(null);
+        assertTrue(solution.getSolutionPath().size() == 0);
+    }
 
     @Test
     void getName() {
