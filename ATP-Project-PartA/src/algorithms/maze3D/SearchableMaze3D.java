@@ -20,13 +20,14 @@ public class SearchableMaze3D implements ISearchable {
     @Override
     public AState getStartState() {
         Position3D position3D = maze3D.getStartPosition();
-        return new Maze3DState(1,position3D,0);
+        int key = getKey(maze3D.getStartPosition());
+        return new Maze3DState(1,position3D,key);
     }
 
     @Override
     public AState getGoalState() {
         Position3D position3D = maze3D.getGoalPosition();
-        Integer key=0;
+        Integer key=getKey(position3D);
         return new Maze3DState(2147483647,position3D,key);
     }
 
