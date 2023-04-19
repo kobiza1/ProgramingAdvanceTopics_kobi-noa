@@ -1,4 +1,7 @@
 package algorithms.maze3D;
+/**
+ * abstract class that gather all the Maze 3D Generators
+ */
 
 public abstract class AMaze3DGenerator implements IMazeGenerator3D{
     @Override

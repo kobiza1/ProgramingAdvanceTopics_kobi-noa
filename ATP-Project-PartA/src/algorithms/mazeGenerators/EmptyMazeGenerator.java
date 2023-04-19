@@ -1,7 +1,5 @@
 package algorithms.mazeGenerators;
 
-import java.util.Map;
-
 public class EmptyMazeGenerator extends AMazeGenerator {
 
     /**

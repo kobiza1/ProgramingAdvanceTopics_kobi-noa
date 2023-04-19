@@ -13,7 +13,6 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm{
     public int getNumberOfNodesEvaluated(){
         return nodesEvaluated;
     }
-
     public boolean check_inputs(ISearchable s){
         return (s == null);
     }

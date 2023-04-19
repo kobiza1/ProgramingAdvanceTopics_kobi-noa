@@ -7,7 +7,6 @@ import java.util.ArrayList;
  */
 public class Solution {
     private ArrayList<AState> solution;
-
     public Solution(ArrayList<AState> path){
         solution=path;
     }
