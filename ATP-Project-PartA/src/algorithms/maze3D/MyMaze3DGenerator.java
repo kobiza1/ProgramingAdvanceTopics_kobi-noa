@@ -43,6 +43,7 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
         this.add_wall_to_list(startPosition);
 
         primAlgo(rows_num, columns_num, startPosition);
+        random_my_maze();
 
         return my_maze;
     }
@@ -53,18 +54,42 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
          * add all the walls that connected to this cell
          *
          */
+        int counter = 2;
         Position3D GoalPosition = new Position3D(0,rows - 1, columns - 1);
         Position3D cur_position = startPosition;
 
-        while(!walls_list.isEmpty() && my_maze.get_value_of_position(GoalPosition) == 1){
+        while(my_maze.get_value_of_position(GoalPosition) == 1){
 
+            if(walls_list.size() == 0){
+                break;
+            }
             cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
 
             //if(num_of_neighbors(cur_position) < 3){
                 my_maze.set_value_of_position(cur_position, 0);
                 add_wall_to_list(cur_position);
+                if(cur_position.getColumnIndex() == columns-1 && cur_position.getRowIndex() == rows -1 && cur_position.getDepthIndex() == depth_level -1){
+                    Position3D down_one_depth = new Position3D(depth_level - counter, number_of_rows - counter, number_of_columns - counter);
+                    walls_list.add(down_one_depth);
+                    counter++;
+                }
 
             //}
+        }
+    }
+
+    private void random_my_maze(){
+        int num;
+        for(int k=0; k<depth_level; k++){
+            for(int i=0; i<number_of_rows; i++){
+                for (int j=0; j<number_of_columns; j++){
+                    if(my_maze.getMap()[k][i][j] == 1){
+                        num = randomizer.nextInt(10);
+                        if(num < 5)
+                            my_maze.getMap()[k][i][j] = randomizer.nextInt(2);
+                    }
+                }
+            }
         }
 
     }
@@ -123,6 +148,7 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
         int column = p.getColumnIndex();
         int depth = p.getDepthIndex();
         //Position3D pos = new Position3D(depth,row - 1, column);
+        walls_list.clear();
 
        /* if (is_valid_position(row - 1, column, depth) && my_maze.get_value_of_position(pos) == 1) {
             walls_list.add(new Position3D( depth, row - 1, column));
