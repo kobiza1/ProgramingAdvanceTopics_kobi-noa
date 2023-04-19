@@ -1,7 +1,5 @@
 package algorithms.search;
 
-import algorithms.mazeGenerators.Position;
-
 import java.util.*;
 
 
@@ -37,14 +35,16 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
 
             if(Objects.equals(currState.getKey(), goalState.getKey())) {
                 solution = backtrackPath(startState,currState);
-                nodesEvaluated = visited.size();
+               // nodesEvaluated = visited.size();
                 return solution;
             }
 
             possibleStates = searchable.getAllPossibleStates(currState);
             AState nextState;
+            nodesEvaluated++;
 
             for (AState possibleState : possibleStates) {
+
 
                 nextState = possibleState;
                 Integer key = nextState.getKey();
@@ -54,6 +54,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
                     visited.put(key, nextState);
                     toVisit.add(nextState);
                 }
+
                 else if(visited.get(key).getCost() > possibleState.getCost() && breadthOrBest){
                     visited.put(key, nextState);
                 }
@@ -61,18 +62,10 @@ public class BreadthFirstSearch extends ASearchingAlgorithm{
         }
 
         solution = new Solution(noPath);
-        nodesEvaluated = visited.size();
+        //nodesEvaluated = visited.size();
         return solution;
     }
 
-    public void addCost(AState currState){
-        AState cameFrom = currState.getCameFrom();
-        currState.set_cost(cameFrom.getCost() + 1);
-    }
-
-    public int get_after_cost_add(AState curState, AState nextState){
-        return curState.getCost()+1;
-    }
 
     public Solution backtrackPath(AState stateState,AState goalState){
         ArrayList<AState> path = new ArrayList<>();

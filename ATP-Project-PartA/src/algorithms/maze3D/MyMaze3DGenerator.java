@@ -54,18 +54,17 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
          *
          */
         Position3D GoalPosition = new Position3D(0,rows - 1, columns - 1);
-        my_maze.set_value_of_position(GoalPosition, 0);
         Position3D cur_position = startPosition;
 
-        while(!walls_list.isEmpty() && !cur_position.equals(GoalPosition)){
+        while(!walls_list.isEmpty() && my_maze.get_value_of_position(GoalPosition) == 1){
 
             cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
 
-            if(num_of_neighbors(cur_position) < 3){
+            //if(num_of_neighbors(cur_position) < 3){
                 my_maze.set_value_of_position(cur_position, 0);
                 add_wall_to_list(cur_position);
 
-            }
+            //}
         }
 
     }
@@ -84,7 +83,7 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
     }
 
 
-    private int num_of_neighbors(Position3D p){
+   /* private int num_of_neighbors(Position3D p){
 
         int row = p.getRowIndex();
         int column = p.getColumnIndex();
@@ -116,28 +115,28 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
             num_of_neighbors++;
         }
         return num_of_neighbors;
-    }
+    }*/
 
     private void add_wall_to_list(Position3D p){
 
         int row = p.getRowIndex();
         int column = p.getColumnIndex();
         int depth = p.getDepthIndex();
-        Position3D pos = new Position3D(depth,row - 1, column);
+        //Position3D pos = new Position3D(depth,row - 1, column);
 
-        if (is_valid_position(row - 1, column, depth) && my_maze.get_value_of_position(pos) == 1) {
+       /* if (is_valid_position(row - 1, column, depth) && my_maze.get_value_of_position(pos) == 1) {
             walls_list.add(new Position3D( depth, row - 1, column));
-        }
+        }*/
 
-        pos = new Position3D(depth,row + 1, column);
+        Position3D pos = new Position3D(depth,row + 1, column);
         if (this.is_valid_position(row + 1, column, depth) && my_maze.get_value_of_position(pos) == 1) {
             walls_list.add(new Position3D(depth,row + 1, column));
         }
 
-        pos = new Position3D(depth, row, column - 1);
+        /*pos = new Position3D(depth, row, column - 1);
         if (this.is_valid_position(row, column - 1, depth) && my_maze.get_value_of_position(pos) == 1) {
             walls_list.add(new Position3D(depth, row, column - 1));
-        }
+        }*/
 
         pos = new Position3D(depth, row,column + 1);
         if (this.is_valid_position(row, column + 1, depth) && my_maze.get_value_of_position(pos) == 1) {
