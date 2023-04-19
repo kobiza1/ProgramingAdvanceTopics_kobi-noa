@@ -4,6 +4,9 @@ import java.util.Map;
 
 public class EmptyMazeGenerator extends AMazeGenerator {
 
+    /**
+     * create an empty maze, maze that contain only 0's
+     */
     public Maze generate(int columns_num, int rows_num){
         int[][] maze_board = new int[rows_num][columns_num];
         if(check_inputs(rows_num, columns_num)){

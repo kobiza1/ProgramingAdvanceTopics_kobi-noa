@@ -2,6 +2,9 @@ package algorithms.search;
 
 import algorithms.mazeGenerators.Position;
 
+/**
+ * extend AState to maze state with the same functionality but unique to mazes
+ */
 public class MazeState extends AState{
 
     public MazeState(int cost, Position position, Integer key) {

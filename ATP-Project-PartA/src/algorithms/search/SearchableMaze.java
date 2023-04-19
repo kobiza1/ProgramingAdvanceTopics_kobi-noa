@@ -24,6 +24,9 @@ public class SearchableMaze implements ISearchable{
     }
 
     public List<AState> getAllPossibleStates(AState m_state){
+        /**
+         * return list of all the possible steps from specific position (include slants moves)
+         */
 
         List<AState> all_possible_states = new ArrayList<>();
         Position next_position;

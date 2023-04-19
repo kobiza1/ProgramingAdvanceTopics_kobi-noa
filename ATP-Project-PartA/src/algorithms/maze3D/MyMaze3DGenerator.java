@@ -1,8 +1,5 @@
 package algorithms.maze3D;
 
-import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.Position;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -42,13 +39,13 @@ public class MyMaze3DGenerator extends AMaze3DGenerator{
         my_maze.setGoalPosition(new Position3D(0, rows_num -1 ,columns_num - 1 ));
         this.add_wall_to_list(startPosition);
 
-        primAlgo(rows_num, columns_num, startPosition);
+        maze_generator(rows_num, columns_num, startPosition);
         random_my_maze();
 
         return my_maze;
     }
 
-    private void primAlgo(int rows, int columns, Position3D startPosition){
+    private void maze_generator(int rows, int columns, Position3D startPosition){
         /**
          * implement the prim algorithms, choose random wall to break and then
          * add all the walls that connected to this cell

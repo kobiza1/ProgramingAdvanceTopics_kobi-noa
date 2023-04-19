@@ -1,6 +1,8 @@
 package algorithms.search;
 
-import algorithms.mazeGenerators.Maze;
+/**
+ * abstract class for searching algorithms
+ */
 
 public abstract class ASearchingAlgorithm implements ISearchingAlgorithm{
     protected Solution solution;

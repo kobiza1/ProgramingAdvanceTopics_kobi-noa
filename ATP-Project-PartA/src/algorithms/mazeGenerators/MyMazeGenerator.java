@@ -11,7 +11,7 @@ public class MyMazeGenerator extends AMazeGenerator{
 
         @Override
         public Maze generate(int rows_num, int columns_num) {
-            if (check_inputs(rows_num, columns_num)) {
+            if (check_inputs(rows_num, columns_num)) { // check inputs
                return my_maze;
             }
 
@@ -21,21 +21,18 @@ public class MyMazeGenerator extends AMazeGenerator{
             randomizer = new Random();
             walls_list = new ArrayList<>();
 
-            int[][] ones_maze_board = initialize_with_ones();
+            int[][] ones_maze_board = initialize_with_ones(); // fill the maze board with walls
             my_maze = new Maze(ones_maze_board, rows_num, columns_num);
-
-            Position startPosition = new Position(0, 0);
-            my_maze.setStartPosition(startPosition);
-            my_maze.set_value_of_position(startPosition.getRowIndex(), startPosition.getColumnIndex(), 0); //0 in Start position
-            my_maze.setGoalPosition(new Position(number_of_rows -1, number_of_columns - 1));
+            Position startPosition = my_maze.getStartPosition();
             this.add_wall_to_list(startPosition);
-            primAlgo();
+            primAlgo(); // run prime algorithm
 
+            // check the validity of the maze (that the maze has a solution)
             SearchableMaze searchableMaze = new SearchableMaze(my_maze);
             BestFirstSearch bestFS = new BestFirstSearch();
             Solution solution = bestFS.solve(searchableMaze);
             ArrayList<AState> solutionPath = solution.getSolutionPath();
-            if(solutionPath.size() == 0){
+            if(solutionPath.size() == 0){ // if we don't have solution regenerate the maze
                 generate(rows_num, columns_num);
             }
 
@@ -48,21 +45,21 @@ public class MyMazeGenerator extends AMazeGenerator{
              * add all the walls that connected to this cell
              *
              */
-            boolean maze_done = false;
-            Position GoalPosition = new Position(number_of_rows - 1, number_of_columns - 1);
+            Position GoalPosition = my_maze.getGoalPosition();
 
-            while(!walls_list.isEmpty()){
+            while(!walls_list.isEmpty()){ // check if the wall list is empty
 
-                Position cur_position = walls_list.remove(randomizer.nextInt(walls_list.size()));
+                Position cur_position = walls_list.remove(randomizer.nextInt(walls_list.size())); // remove random wall
 
                 if(num_of_neighbors(cur_position) == 1){
-                    my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
-                    add_wall_to_list(cur_position);
+                    my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0); // break the wall
+                    add_wall_to_list(cur_position); // add his neighbors to the wall list
 
                 }
             }
 
             my_maze.setGoalPosition(GoalPosition);
+            //if we didn't get to the goal try to connect the goal to the start path
             if(my_maze.get_value_of_position(number_of_rows -1, number_of_columns - 1) == 1){
                 my_maze.set_value_of_position(my_maze.getGoalPosition().getRowIndex(), my_maze.getGoalPosition().getColumnIndex(), 0);
                 this.add_wall_to_list(my_maze.getGoalPosition());
@@ -72,20 +69,19 @@ public class MyMazeGenerator extends AMazeGenerator{
 
                     if(num_of_neighbors(cur_position) == 1){
                         if(my_maze.get_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex()) == 0){
-                            maze_done = true;
                             break;
                         }
                         my_maze.set_value_of_position(cur_position.getRowIndex(), cur_position.getColumnIndex(),0);
                         add_wall_to_list(cur_position);
                     }
                 }
-                if(!maze_done){
-                    primAlgo();
-                }
             }
         }
 
         private int[][] initialize_with_ones() {
+            /**
+             * initialize the maze board in ones
+             */
 
             int[][] mat = new int[number_of_rows][number_of_columns];
             for(int i=0; i<number_of_rows; i++){
@@ -98,27 +94,33 @@ public class MyMazeGenerator extends AMazeGenerator{
 
 
         private int num_of_neighbors(Position p){
+            /**
+             * check how many neighbors that we already visited there for this position
+             */
 
             int row = p.getRowIndex();
             int column = p.getColumnIndex();
             int num_of_neighbors = 0;
 
-            if (this.is_valid_position(row, column - 1) && (my_maze.get_value_of_position(row,column - 1) == 0)) {
+            if (this.is_valid_position(row, column - 1) && (my_maze.get_value_of_position(row,column - 1) == 0)) { // left neighbor
                 num_of_neighbors++;
             }
-            if (this.is_valid_position(row, column + 1) && (my_maze.get_value_of_position(row,column + 1) == 0)) {
+            if (this.is_valid_position(row, column + 1) && (my_maze.get_value_of_position(row,column + 1) == 0)) { // right neighbor
                 num_of_neighbors++;
             }
-            if (this.is_valid_position(row - 1, column) && (my_maze.get_value_of_position(row - 1, column) == 0)) {
+            if (this.is_valid_position(row - 1, column) && (my_maze.get_value_of_position(row - 1, column) == 0)) { // up neighbor
                 num_of_neighbors++;
             }
-            if (this.is_valid_position(row + 1, column) && (my_maze.get_value_of_position(row + 1, column) == 0)) {
+            if (this.is_valid_position(row + 1, column) && (my_maze.get_value_of_position(row + 1, column) == 0)) { // down neighbor
                 num_of_neighbors++;
             }
             return num_of_neighbors;
         }
 
         private void add_wall_to_list(Position p){
+            /**
+             * add all the neighbors of this position to the wall lists (if they are walls)
+             */
 
             int row = p.getRowIndex();
             int column = p.getColumnIndex();
@@ -141,6 +143,9 @@ public class MyMazeGenerator extends AMazeGenerator{
         }
 
         private boolean is_valid_position(int row,int col){
+            /**
+             * check if position is inside the maze board
+             */
 
             if(row < 0){
                 return false;

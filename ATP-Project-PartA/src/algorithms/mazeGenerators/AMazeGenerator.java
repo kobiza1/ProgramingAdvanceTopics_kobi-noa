@@ -1,5 +1,9 @@
 package algorithms.mazeGenerators;
 
+/**
+ * abstract class that gather all the Maze Generators
+ */
+
 public abstract class AMazeGenerator implements IMazeGenerator {
 
     protected  int number_of_rows;
@@ -7,6 +11,9 @@ public abstract class AMazeGenerator implements IMazeGenerator {
 
     public abstract Maze generate(int columns_num, int rows_num);
     public long measureAlgorithmTimeMillis(int columns_num, int rows_num){
+        /**
+         * measure the time that take to the generate function to create maze in ms
+         */
         long start_time = System.currentTimeMillis();
         generate(columns_num, rows_num);
         long end_time = System.currentTimeMillis();

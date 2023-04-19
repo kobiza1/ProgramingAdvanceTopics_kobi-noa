@@ -1,8 +1,10 @@
 package algorithms.search;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * hold the solution of the mazes
+ */
 public class Solution {
     private ArrayList<AState> solution;
 

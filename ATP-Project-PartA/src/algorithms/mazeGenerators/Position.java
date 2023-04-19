@@ -23,6 +23,9 @@ public class Position {
 
     @Override
     public boolean equals(Object position1) {
+        /**
+         * compare 2 position according to the row_index and the column index
+         */
         if(!(position1 instanceof Position)){
             return false;
         }

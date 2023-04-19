@@ -2,6 +2,9 @@ package algorithms.search;
 
 import java.util.*;
 
+/**
+ * search the extends BFS but use priority queue to evaluate fewer states
+ */
 public class BestFirstSearch extends BreadthFirstSearch{
 
     public BestFirstSearch(){

@@ -6,6 +6,9 @@ public class SimpleMazeGenerator extends AMazeGenerator{
 
     @Override
     public Maze generate(int columns_num, int rows_num) {
+        /**
+         * generate maze that have at least one solution
+         */
         if (check_inputs(rows_num, columns_num)) {
             return null;
         }
@@ -13,6 +16,7 @@ public class SimpleMazeGenerator extends AMazeGenerator{
         Random r = new Random();
         int [][] maze = new int[rows_num][columns_num];
         zeros_or_ones = r.nextInt(2);
+        // create row of 0's and then row of 1's and break random walls in the rows of 1's
         for (int i=0; i<rows_num; i++){
             random_break = r.nextInt(columns_num);
             for (int j=0; j<columns_num; j++){

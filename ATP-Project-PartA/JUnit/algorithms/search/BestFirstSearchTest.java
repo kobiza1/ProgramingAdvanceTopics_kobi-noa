@@ -25,14 +25,14 @@ class BestFirstSearchTest {
         assertTrue(check1);
         assertTrue(check2);
     }
-
-    void solve_wrong_input(){
-        Solution solution = bestFirstSearch.solve(null);
-        assertTrue(solution.getSolutionPath().size() == 0);
-    }
-
     @Test
     void getName() {
         assertEquals(bestFirstSearch.getName(), "BestFirstSearch");
+    }
+
+    @Test
+    void solve_wrong_input() {
+        Solution solution = bestFirstSearch.solve(null);
+        assertTrue(solution.getSolutionPath().size() == 0);
     }
 }
