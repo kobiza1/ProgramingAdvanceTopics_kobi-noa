@@ -19,6 +19,36 @@ public class Maze {
         this.GoalPosition = new Position(rows_number-1,columns_number-1); // always the end
         this.StartPosition = new Position(0,0); // always the start
     }
+    public Maze(byte[] bytes_maze){
+        set_rows_number(bytes_maze);
+        set_col_number(bytes_maze);
+        this.maze_board = new int[rows_number][columns_number];
+        set_maze_content(bytes_maze);
+        this.StartPosition = new Position(0,0);
+        this.GoalPosition = new Position(this.rows_number - 1, this.columns_number - 1);
+    }
+
+    private void set_maze_content(byte[] bytesMaze) {
+        int counter = 16;
+        for(int i=0; i<this.rows_number; i++){
+            for(int j=0; j<this.columns_number; j++){
+                this.maze_board[i][j] = bytesMaze[counter];
+                counter++;
+            }
+        }
+    }
+
+    private void set_col_number(byte[] bytesMaze) {
+        byte[] subArray = Arrays.copyOfRange(bytesMaze, 8, 16);
+        BigInteger bigInteger = new BigInteger(1, subArray);
+        this.columns_number = bigInteger.intValue();
+    }
+
+    private void set_rows_number(byte[] bytesMaze) {
+        byte[] subArray = Arrays.copyOfRange(bytesMaze, 0, 8);
+        BigInteger bigInteger = new BigInteger(1, subArray);
+        this.rows_number = bigInteger.intValue();
+    }
 
     public int[][] getMaze_board(){
         return maze_board;
