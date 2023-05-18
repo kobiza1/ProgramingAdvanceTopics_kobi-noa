@@ -23,11 +23,23 @@ public class MyCompressorOutputStream extends OutputStream {
         ArrayList<Byte> compressed_maze = new ArrayList<>();
 
         int number_of_rows = get_int_from_indexes(b, 0, 8), number_of_cols = get_int_from_indexes(b, 8, 16);
-        int num_of_RowOrCol=0, max = Math.max(number_of_rows, number_of_cols), min = Math.min(number_of_rows, number_of_cols);
-
-        long value_of_RowOrColumn;
-        String binary_RowOrCol = "";
+        int num_of_RowOrCol=0, min = Math.min(number_of_rows, number_of_cols);
+        String binary_RowOrCol;
         byte[] bytes;
+
+        if(min != number_of_rows){
+            compressed_maze.add((byte)1);
+        }
+        else
+            compressed_maze.add((byte)0);
+
+       byte[] min_in_bytes = convertToByteArray(min);
+       if(min_in_bytes == null){
+           return;
+       }
+       for(int i=0;i<2;i++){
+           compressed_maze.add(min_in_bytes[i]);
+       }
 
         while (num_of_RowOrCol > min){
             if(min != number_of_rows){
@@ -39,16 +51,7 @@ public class MyCompressorOutputStream extends OutputStream {
 
             num_of_RowOrCol++;
 
-            if(max > 63){
-                 bytes = new BigInteger(binary_RowOrCol, 2).toByteArray();
-
-            }
-            else{
-                value_of_RowOrColumn = Long.parseLong(binary_RowOrCol, 2);
-                ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-                buffer.putLong(value_of_RowOrColumn);
-                bytes = buffer.array();
-            }
+           bytes = new BigInteger(binary_RowOrCol, 2).toByteArray();
 
             for (byte aByte : bytes) {
                 compressed_maze.add((byte)num_of_RowOrCol);
@@ -75,8 +78,14 @@ public class MyCompressorOutputStream extends OutputStream {
     private String row_to_str(byte[] b, int number_of_cols, int start_index) {
         int const_gap = 16;
         String row_str = "";
+        boolean first_zeros_seq = true;
         for(int i=start_index; i<start_index+number_of_cols; i++){
-            row_str += b[i + const_gap];
+            if(first_zeros_seq && b[i+const_gap] == 0){}
+            else {
+                first_zeros_seq = false;
+                row_str += b[i + const_gap];
+            }
+
         }
         return row_str;
     }
@@ -84,8 +93,13 @@ public class MyCompressorOutputStream extends OutputStream {
     private String col_to_str(byte[] b, int number_of_rows, int start_index, int number_of_cols) {
         int const_gap = 16;
         String row_str = "";
+        boolean first_zeros_seq = true;
         for(int i=0; i<number_of_rows; i++){
-            row_str += b[i*number_of_cols + const_gap + start_index];
+            if(first_zeros_seq && b[i*number_of_cols + const_gap + start_index] == 0){}
+            else {
+                first_zeros_seq = false;
+                row_str += b[i*number_of_cols + const_gap + start_index];
+            }
         }
         return row_str;
     }
@@ -103,21 +117,37 @@ public class MyCompressorOutputStream extends OutputStream {
         }
         return to_return;
     }
-    /*public static void main(String[] args) throws IOException {
-        byte[] byteArray = new byte[1000];
 
 
-        for (int i = 0; i < 100; i++) {
-            byteArray[i] = (byte) (Math.random() < 0.9 ? 0 : 1);
+    public static byte[] convertToByteArray(int number) {
+        if (number >= 0 && number <= 1000) {
+            byte[] byteArray = new byte[2];
+            byteArray[0] = (byte) ((number >> 8) & 0xFF);
+            byteArray[1] = (byte) (number & 0xFF);
+            return byteArray;
+        } else {
+            System.out.println("Number is out of range (0 to 1000).");
+            return null;
         }
-        OutputStream o = new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                System.out.println(b);
+    }
+
+
+
+        public static void main(String[] args) {
+            int number = 0; // Example integer less than or equal to 1000
+            byte[] byteArray = convertToByteArray(number);
+
+            System.out.println("Number: " + number);
+            System.out.print("Byte Array: [ ");
+            for (byte b : byteArray) {
+                System.out.print((b & 0xFF) + " ");
             }
-        };
-        MyCompressorOutputStream c = new MyCompressorOutputStream(o);
-        c.write(byteArray);
-    }*/
+            System.out.println("]");
+
+        }
 
 }
+
+
+
+
