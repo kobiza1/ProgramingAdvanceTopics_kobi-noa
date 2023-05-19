@@ -21,7 +21,6 @@ public class MyCompressorOutputStream extends OutputStream {
    // @Override
     public void write(byte[] b){
         ArrayList<Byte> compressed_maze = new ArrayList<>();
-
         int number_of_rows = get_int_from_indexes(b, 0, 4), number_of_cols = get_int_from_indexes(b, 4, 8);
         int num_of_Row=0;
         String binary_Row;
