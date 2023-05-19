@@ -17,16 +17,20 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             ObjectInputStream in = new ObjectInputStream(interruptibleInputStream);
             ObjectOutputStream out = new ObjectOutputStream(outToClient);
             int[] indexes =(int[]) in.readObject();
-
             IMazeGenerator generator = Configurations.getInstance().getMazeGeneratingAlgorithm();
             Maze newMaze = generator.generate(indexes[0], indexes[1]);
 
             byte[] array = newMaze.toByteArray();
 
-            MyCompressorOutputStream myCompressor = new MyCompressorOutputStream(out);
+            OutputStream myCompressor = new MyCompressorOutputStream(out);
             myCompressor.write(array);
-            myCompressor.flush();
-            out.flush();
+//            myCompressor.flush();
+
+//            out.write(array);
+//            out.flush();
+//
+//            in.close();
+            out.close();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

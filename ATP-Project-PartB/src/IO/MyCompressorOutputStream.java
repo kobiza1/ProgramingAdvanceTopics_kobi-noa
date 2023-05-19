@@ -1,6 +1,7 @@
 package IO;
 
 import java.io.IOException;
+import java.io.OptionalDataException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -18,7 +19,7 @@ public class MyCompressorOutputStream extends OutputStream {
         // DO NOTHING
     }
 
-   // @Override
+    @Override
     public void write(byte[] b){
         ArrayList<Byte> compressed_maze = new ArrayList<>();
         int number_of_rows = get_int_from_indexes(b, 0, 4), number_of_cols = get_int_from_indexes(b, 4, 8);
@@ -52,16 +53,20 @@ public class MyCompressorOutputStream extends OutputStream {
         try {
             out.write(res);
             out.flush();
+
+            //out.close();
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
-        finally {
-            try {
-                out.close();
-            }catch (IOException e){
-                System.out.println(e.getMessage());
-            }
-        }
+//        finally {
+//            try {
+//                out.close();
+//            } catch (OptionalDataException e){
+//                System.out.println(e.getMessage());
+//            }catch (IOException e){
+//                System.out.println(e.getMessage());
+//            }
+//        }
     }
 
     private String row_to_str(byte[] b, int number_of_cols, int start_index) {

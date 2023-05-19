@@ -14,19 +14,24 @@ public class Server {
     private volatile boolean stop;
     private final ExecutorService threadPool; // Thread pool
 
-    //private Thread serverThread;
+    private Thread serverThread;
 
     public Server(int port, int listeningIntervalMS, IServerStrategy strategy) {
         this.port = port;
         this.listeningIntervalMS = listeningIntervalMS;
         this.strategy = strategy;
         // initialize a new fixed thread pool with threadPoolSize threads from Configuration file
-        int threadPoolSize = Configurations.getInstance().getThreadPoolSize();
+        Configurations conf = Configurations.getInstance();
+        int threadPoolSize = conf.getThreadPoolSize();
         this.threadPool = Executors.newFixedThreadPool(threadPoolSize);
-        //this.serverThread = new Thread();
+        this.serverThread = new Thread(this::startServer);
     }
 
     public void start(){
+        serverThread.start();
+    }
+
+    public void startServer(){
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             serverSocket.setSoTimeout(listeningIntervalMS);

@@ -21,8 +21,9 @@ public class Configurations {
 
     private Configurations(){
         try {
-            String path = "resources/config.properties";
-            InputStream file = new FileInputStream(path);
+            //String path = "resources/config.properties";
+            //InputStream file = new FileInputStream(path);
+            InputStream file = Configurations.class.getClassLoader().getResourceAsStream("config.properties");
             Properties prop = new Properties();
             prop.load(file);
 
