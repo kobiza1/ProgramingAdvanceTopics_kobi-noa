@@ -1,11 +1,12 @@
 
 package algorithms.mazeGenerators;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class Maze {
+public class Maze implements Serializable {
 
     int[][] maze_board;
     int rows_number;
