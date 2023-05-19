@@ -1,5 +1,6 @@
 package Server;
 
+import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
@@ -20,12 +21,13 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             IMazeGenerator generator = Configurations.getInstance().getMazeGeneratingAlgorithm();
             Maze newMaze = generator.generate(indexes[0], indexes[1]);
 
-//            byte[] array = newMaze.toByteArray();
-//            MyCompressorOutputStream myCompressor = new MyCompressorOutputStream();
-//            byte[] maze = myCompressor.write(array);
-//            myCompressor.flush();
+            byte[] array = newMaze.toByteArray();
 
-            //out.write(maze);
+           // MyCompressorOutputStream myCompressor = new MyCompressorOutputStream();
+            //byte[] maze = myCompressor.write(array);
+            //myCompressor.flush();
+
+          //  out.write(maze);
             out.flush();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
