@@ -38,7 +38,7 @@ public class MyCompressorOutputStream extends OutputStream {
        }
 
         while (num_of_Row < number_of_rows){
-            binary_Row = row_to_str(b, number_of_cols, num_of_Row);
+            binary_Row = row_to_str(b, number_of_cols, num_of_Row*number_of_rows);
             num_of_Row++;
 
             bytes = new BigInteger(binary_Row, 2).toByteArray();
@@ -68,15 +68,10 @@ public class MyCompressorOutputStream extends OutputStream {
     private String row_to_str(byte[] b, int number_of_cols, int start_index) {
         int const_gap = 8;
         String row_str = "";
-        boolean first_zeros_seq = true;
         for(int i=start_index; i<start_index+number_of_cols; i++){
-            if(first_zeros_seq && b[i+const_gap] == 0){}
-            else {
-                first_zeros_seq = false;
-                row_str += b[i + const_gap];
-            }
-
+            row_str += b[i + const_gap];
         }
+
         return row_str;
     }
 

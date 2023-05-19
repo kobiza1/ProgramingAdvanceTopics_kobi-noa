@@ -12,7 +12,7 @@ public class RunCompressDecompressMaze {
 
         String mazeFileName = "savedMaze.maze";
         AMazeGenerator mazeGenerator = new MyMazeGenerator();
-        Maze maze = mazeGenerator.generate(4, 4); //Generate new maze
+        Maze maze = mazeGenerator.generate(1000, 1000); //Generate new maze
         try {
             // save maze to a file
             OutputStream out = new MyCompressorOutputStream(new FileOutputStream(mazeFileName));
@@ -25,7 +25,8 @@ public class RunCompressDecompressMaze {
         byte savedMazeBytes[] = new byte[0]; try {
            // read maze from file
             InputStream in = new MyDecompressorInputStream(new FileInputStream(mazeFileName));
-            savedMazeBytes = new byte[maze.toByteArray().length]; in.read(savedMazeBytes);
+            savedMazeBytes = new byte[maze.toByteArray().length];
+            in.read(savedMazeBytes);
             in.close();
         } catch (IOException e) { e.printStackTrace();
         }
