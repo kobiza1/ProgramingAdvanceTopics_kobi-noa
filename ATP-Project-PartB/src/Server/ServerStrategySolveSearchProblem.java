@@ -5,9 +5,16 @@ import algorithms.search.*;
 
 import java.io.*;
 import java.nio.channels.Channels;
+import java.util.Hashtable;
+import java.util.List;
 
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
+    private Hashtable<Maze, File> solutionToMaze;
+
+    public ServerStrategySolveSearchProblem(){
+        solutionToMaze = new Hashtable<>();
+    }
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
         InputStream interruptibleInputStream = Channels.newInputStream(Channels.newChannel(inFromClient));
@@ -18,9 +25,23 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             ISearchingAlgorithm searcher = Configurations.getInstance().getMazeSearchingAlgorithm();
 
             Maze maze = (Maze) in.readObject();
+            Solution solution;
+            if(!solutionToMaze.containsKey(maze)) {
+                SearchableMaze searchableMaze = new SearchableMaze(maze);
+                solution = searcher.solve(searchableMaze);
 
-            SearchableMaze searchableMaze = new SearchableMaze(maze);
-            Solution solution = searcher.solve(searchableMaze);
+                String tempDirectoryPath = System.getProperty("java.io.tmpdir");
+                File solutionFile = new File(tempDirectoryPath);
+                FileOutputStream fileOutput = new FileOutputStream(solutionFile);
+                ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+                objectOutput.writeObject(solution);
+                solutionToMaze.put(maze, solutionFile);
+            } else {
+                File solutionFile = solutionToMaze.get(maze);
+                FileInputStream fileInput = new FileInputStream(solutionFile);
+                ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+                solution = (Solution) objectInput.readObject();
+            }
 
             out.writeObject(solution);
             out.flush();
@@ -29,3 +50,5 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         }
     }
 }
+
+
