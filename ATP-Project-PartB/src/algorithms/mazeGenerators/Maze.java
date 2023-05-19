@@ -34,7 +34,7 @@ public class Maze {
     }
 
     private void set_maze_content(byte[] bytesMaze) {
-        int counter = 16;
+        int counter = 8;
         for(int i=0; i<this.rows_number; i++){
             for(int j=0; j<this.columns_number; j++){
                 this.maze_board[i][j] = bytesMaze[counter];
@@ -44,13 +44,13 @@ public class Maze {
     }
 
     private void set_col_number(byte[] bytesMaze) {
-        byte[] subArray = Arrays.copyOfRange(bytesMaze, 8, 16);
+        byte[] subArray = Arrays.copyOfRange(bytesMaze, 4, 8);
         BigInteger bigInteger = new BigInteger(1, subArray);
         this.columns_number = bigInteger.intValue();
     }
 
     private void set_rows_number(byte[] bytesMaze) {
-        byte[] subArray = Arrays.copyOfRange(bytesMaze, 0, 8);
+        byte[] subArray = Arrays.copyOfRange(bytesMaze, 0, 4);
         BigInteger bigInteger = new BigInteger(1, subArray);
         this.rows_number = bigInteger.intValue();
     }
@@ -113,15 +113,15 @@ public class Maze {
     }
 
     public byte[] toByteArray(){
-        byte[] array = new byte[(rows_number*columns_number)+16];
+        byte[] array = new byte[(rows_number*columns_number)+8];
         
         byte[] rows = convertToByteArray(rows_number);
         byte[] columns = convertToByteArray(columns_number);
 
-        System.arraycopy(rows, 0, array, 0, 8);
-        System.arraycopy(columns, 0, array, 8, 8);
+        System.arraycopy(rows, 0, array, 0, 4);
+        System.arraycopy(columns, 0, array, 4, 4);
 
-        int index = 16;
+        int index = 8;
         for (int i=0; i<rows_number; i++){
             for(int j=0; j<columns_number; j++){
                 array[index] = (byte) maze_board[i][j];
@@ -132,17 +132,15 @@ public class Maze {
     }
 
     public static byte[] convertToByteArray(int value){
-        BigInteger bigInteger = BigInteger.valueOf(value);
-        byte[] valueInBytes = bigInteger.toByteArray();
-        byte[] returnByte = new byte[8];
-
-        int paddingLength = Math.max(0, 8 - valueInBytes.length);
-        System.arraycopy(valueInBytes, 0, returnByte, paddingLength, Math.min(8, valueInBytes.length));
-        return returnByte;
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(value);
+        byte[] bytes = buffer.array();
+        return bytes;
     }
 
     public static void main(String[] args) {
         int[][] array = new int[1000][950];
+
 
 // fill the array with random 0's and 1's
         for (int i = 0; i < 1000; i++) {
@@ -161,7 +159,18 @@ public class Maze {
                 }
             }
         }
+        System.out.println(m1.getRows_number() + " " + m1.getColumns_number());
         System.out.println("all_good");
+       /* int value = 1500; // The int value you want to convert
+
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(value);
+        byte[] bytes = buffer.array();
+
+        ByteBuffer buffer2 = ByteBuffer.wrap(bytes);
+        int value2 = buffer2.getInt();
+        System.out.println(value2);*/
+
     }
 
 

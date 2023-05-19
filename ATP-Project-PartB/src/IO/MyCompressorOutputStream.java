@@ -22,39 +22,29 @@ public class MyCompressorOutputStream extends OutputStream {
     public void write(byte[] b){
         ArrayList<Byte> compressed_maze = new ArrayList<>();
 
-        int number_of_rows = get_int_from_indexes(b, 0, 8), number_of_cols = get_int_from_indexes(b, 8, 16);
-        int num_of_RowOrCol=0, min = Math.min(number_of_rows, number_of_cols);
-        String binary_RowOrCol;
+        int number_of_rows = get_int_from_indexes(b, 0, 4), number_of_cols = get_int_from_indexes(b, 4, 8);
+        int num_of_Row=0;
+        String binary_Row;
         byte[] bytes;
 
-        if(min != number_of_rows){
-            compressed_maze.add((byte)1);
-        }
-        else
-            compressed_maze.add((byte)0);
+       byte[] rows_in_bytes = convertToByteArray(number_of_rows);
+       byte[] cols_in_bytes = convertToByteArray(number_of_cols);
 
-       byte[] min_in_bytes = convertToByteArray(min);
-       if(min_in_bytes == null){
-           return;
+       for(int i=0;i<rows_in_bytes.length;i++){
+           compressed_maze.add(rows_in_bytes[i]);
        }
-       for(int i=0;i<2;i++){
-           compressed_maze.add(min_in_bytes[i]);
+       for(int i=0;i<cols_in_bytes.length;i++){
+           compressed_maze.add(cols_in_bytes[i]);
        }
 
-        while (num_of_RowOrCol > min){
-            if(min != number_of_rows){
-                binary_RowOrCol = col_to_str(b, number_of_rows, num_of_RowOrCol, number_of_cols);
-            }
-            else {
-                binary_RowOrCol = row_to_str(b, number_of_cols, num_of_RowOrCol*number_of_cols);
-            }
+        while (num_of_Row < number_of_rows){
+            binary_Row = row_to_str(b, number_of_cols, num_of_Row);
+            num_of_Row++;
 
-            num_of_RowOrCol++;
-
-           bytes = new BigInteger(binary_RowOrCol, 2).toByteArray();
+            bytes = new BigInteger(binary_Row, 2).toByteArray();
 
             for (byte aByte : bytes) {
-                compressed_maze.add((byte)num_of_RowOrCol);
+                compressed_maze.add((byte)num_of_Row);
                 compressed_maze.add(aByte);
             }
         }
@@ -76,7 +66,7 @@ public class MyCompressorOutputStream extends OutputStream {
     }
 
     private String row_to_str(byte[] b, int number_of_cols, int start_index) {
-        int const_gap = 16;
+        int const_gap = 8;
         String row_str = "";
         boolean first_zeros_seq = true;
         for(int i=start_index; i<start_index+number_of_cols; i++){
@@ -90,7 +80,7 @@ public class MyCompressorOutputStream extends OutputStream {
         return row_str;
     }
 
-    private String col_to_str(byte[] b, int number_of_rows, int start_index, int number_of_cols) {
+   /* private String col_to_str(byte[] b, int number_of_rows, int start_index, int number_of_cols) {
         int const_gap = 16;
         String row_str = "";
         boolean first_zeros_seq = true;
@@ -102,7 +92,7 @@ public class MyCompressorOutputStream extends OutputStream {
             }
         }
         return row_str;
-    }
+    }*/
 
     private int get_int_from_indexes(byte[] b, int start, int end) {
         byte[] subArray1 = Arrays.copyOfRange(b, start, end);
@@ -120,15 +110,10 @@ public class MyCompressorOutputStream extends OutputStream {
 
 
     public static byte[] convertToByteArray(int number) {
-        if (number >= 0 && number <= 1000) {
-            byte[] byteArray = new byte[2];
-            byteArray[0] = (byte) ((number >> 8) & 0xFF);
-            byteArray[1] = (byte) (number & 0xFF);
-            return byteArray;
-        } else {
-            System.out.println("Number is out of range (0 to 1000).");
-            return null;
-        }
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(number);
+        byte[] bytes = buffer.array();
+        return bytes;
     }
 
 

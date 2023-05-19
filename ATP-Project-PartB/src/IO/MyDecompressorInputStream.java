@@ -21,29 +21,24 @@ public class MyDecompressorInputStream extends InputStream {
     public int read(byte[] decompressed) throws IOException {
         byte[] compressed_list = in.readAllBytes();
         ArrayList<Byte> decompressed_list = new ArrayList<>();
-        int RowOrCol_length = get_int_from_indexes(compressed_list, 1, 3);
+        int Row_number = get_int_from_indexes(compressed_list, 0, 1);
+        int Col_number = get_int_from_indexes(compressed_list, 1, 8);
         int index = 3;
-        for(int i=0; i<RowOrCol_length; i++){
-            byte[] RowOrCol = find_RowOrCol_byteArray(compressed_list, index);
+        for(int i=0; i<Row_number; i++){
+            byte[] RowOrCol = find_Row_byteArray(compressed_list, index);
             index += RowOrCol.length*2;
             BigInteger bigInt =  new BigInteger(1, RowOrCol);
             String BigIntegerString = bigInt.toString(2);
-            BigIntegerString = add_zeros_to_str(BigIntegerString, RowOrCol_length-BigIntegerString.length());
-            if(compressed_list[0] == 0){
-                add_row_to_list(BigIntegerString, decompressed_list);
-            }
-            else{
-                add_col_to_list(BigIntegerString, decompressed_list);
-            }
+            BigIntegerString = add_zeros_to_str(BigIntegerString, Col_number-BigIntegerString.length());
+            add_row_to_list(BigIntegerString, decompressed_list);
         }
         return 0;
     }
 
-    private void add_col_to_list(String bigIntegerString, ArrayList<Byte> decompressedList) {
-    }
-
     private void add_row_to_list(String bigIntegerString, ArrayList<Byte> decompressedList) {
-
+        char[] chars = bigIntegerString.toCharArray();
+        for(char bit : chars)
+            decompressedList.add((byte)bit);
     }
 
     private String add_zeros_to_str(String our_String, int zeros_to_add) {
@@ -60,7 +55,7 @@ public class MyDecompressorInputStream extends InputStream {
         BigInteger bigInteger1 = new BigInteger(1, subArray1);
         return bigInteger1.intValue();
     }
-    private byte[] find_RowOrCol_byteArray(byte[] compressedList, int start_index) {
+    private byte[] find_Row_byteArray(byte[] compressedList, int start_index) {
         ArrayList<Byte> res = new ArrayList<>();
         int RowOrCol = compressedList[start_index];
         int i = 0;
