@@ -174,5 +174,21 @@ public class Maze implements Serializable {
 
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Maze){
+            Maze other = (Maze)obj;
+            if(this.rows_number != other.getRows_number() || this.columns_number != other.getColumns_number())
+                return false;
+            for(int i=0; i<rows_number; i++){
+                for(int j=0; j<columns_number; j++){
+                    if(this.maze_board[i][j] != other.getMaze_board()[i][j])
+                        return false;
+                }
+            }
+            return true;
+        }
+        else
+            return false;
+    }
 }
