@@ -15,11 +15,9 @@ public class Solution implements Serializable {
     public ArrayList<AState> getSolutionPath() {
         return solution;
     }
-
     public void setName(String Name){
         name=Name;
     }
-
     public String toString(){
         return name;
     }
