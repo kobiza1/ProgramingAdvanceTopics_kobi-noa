@@ -22,11 +22,12 @@ public class MyCompressorOutputStream extends OutputStream {
     @Override
     public void write(byte[] b){
         ArrayList<Byte> compressed_maze = new ArrayList<>();
+        // get the number of rows and columns
         int number_of_rows = get_int_from_indexes(b, 0, 4), number_of_cols = get_int_from_indexes(b, 4, 8);
         int num_of_Row=0;
         String binary_Row;
         byte[] bytes;
-
+        // convert into byte array and put it into the compressed list
        byte[] rows_in_bytes = convertToByteArray(number_of_rows);
        byte[] cols_in_bytes = convertToByteArray(number_of_cols);
 
@@ -36,18 +37,19 @@ public class MyCompressorOutputStream extends OutputStream {
        for(int i=0;i<cols_in_bytes.length;i++){
            compressed_maze.add(cols_in_bytes[i]);
        }
+        //
+       // while (num_of_Row < number_of_rows){
+           // binary_Row = row_to_str(b, number_of_cols, num_of_Row*number_of_rows);
+           // num_of_Row++;
+        binary_Row = get_all_map_as_string(b);
 
-        while (num_of_Row < number_of_rows){
-            binary_Row = row_to_str(b, number_of_cols, num_of_Row*number_of_rows);
-            num_of_Row++;
+        bytes = new BigInteger(binary_Row, 2).toByteArray();
 
-            bytes = new BigInteger(binary_Row, 2).toByteArray();
-
-            for (byte aByte : bytes) {
-                compressed_maze.add((byte)num_of_Row);
-                compressed_maze.add(aByte);
-            }
+        for (byte aByte : bytes) {
+            //compressed_maze.add((byte)num_of_Row);
+            compressed_maze.add(aByte);
         }
+      //  }
 
         byte[] res = from_list_to_array(compressed_maze);
 
@@ -105,6 +107,14 @@ public class MyCompressorOutputStream extends OutputStream {
         buffer.putInt(number);
         byte[] bytes = buffer.array();
         return bytes;
+    }
+    private String get_all_map_as_string(byte[] b) {
+        int const_gap = 8;
+        String row_str = "";
+        for(int i=8; i<b.length; i++){
+            row_str += b[i];
+        }
+        return row_str;
     }
 }
 

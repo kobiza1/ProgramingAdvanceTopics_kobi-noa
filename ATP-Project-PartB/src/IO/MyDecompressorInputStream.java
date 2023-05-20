@@ -23,25 +23,30 @@ public class MyDecompressorInputStream extends InputStream {
     public int read(byte[] decompressed) throws IOException {
         compressed_list = in.readAllBytes();
         ArrayList<Byte> decompressed_list = new ArrayList<>();
+
         int Row_number = get_int_from_indexes(compressed_list, 0, 4);
         int Col_number = get_int_from_indexes(compressed_list, 4, 8);
+
         byte[] rows_number_in_bytes = convertToByteArray(Row_number);
         byte[] cols_number_in_bytes = convertToByteArray(Col_number);
+
         for(int i=0;i<rows_number_in_bytes.length; i++){
             decompressed_list.add(rows_number_in_bytes[i]);
         }
         for(int i=0;i<cols_number_in_bytes.length; i++){
             decompressed_list.add(cols_number_in_bytes[i]);
         }
-        int index = 8;
-        for(int i=0; i<Row_number; i++){
-            byte[] RowOrCol = find_Row_byteArray(compressed_list, index);
-            index += RowOrCol.length*2;
+
+        //int index = 8;
+       // for(int i=0; i<Row_number; i++){
+           // byte[] RowOrCol = find_Row_byteArray(compressed_list, index);
+           // index += RowOrCol.length*2;
+            byte[] RowOrCol = Arrays.copyOfRange(compressed_list, 8, compressed_list.length);
             BigInteger bigInt =  new BigInteger(1, RowOrCol);
             String BigIntegerString = bigInt.toString(2);
-            BigIntegerString = add_zeros_to_str(BigIntegerString, Col_number-BigIntegerString.length());
+            BigIntegerString = add_zeros_to_str(BigIntegerString, Col_number*Row_number-BigIntegerString.length());
             add_row_to_list(BigIntegerString, decompressed_list);
-        }
+        //}
         for(int i=0; i<decompressed_list.size(); i++){
             decompressed[i] = decompressed_list.get(i);
         }
@@ -117,4 +122,5 @@ public class MyDecompressorInputStream extends InputStream {
         byte[] bytes = buffer.array();
         return bytes;
     }
+
 }
