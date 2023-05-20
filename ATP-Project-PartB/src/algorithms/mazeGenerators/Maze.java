@@ -140,38 +140,8 @@ public class Maze implements Serializable {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[1000][950];
-
-
-// fill the array with random 0's and 1's
-        for (int i = 0; i < 1000; i++) {
-            for (int j = 0; j < 950; j++) {
-                array[i][j] = (int) (Math.random() * 2);
-            }
-        }
-        Maze m = new Maze(array, 1000, 950);
-        byte[] b = m.toByteArray();
-        System.out.println(b);
-        Maze m1 = new Maze(b);
-        for (int i = 0; i < 1000; i++) {
-            for (int j = 0; j < 950; j++) {
-                if (!(m.maze_board[i][j] == m1.maze_board[i][j])) {
-                    System.out.println("fuck");
-                }
-            }
-        }
-        System.out.println(m1.getRows_number() + " " + m1.getColumns_number());
-        System.out.println("all_good");
-       /* int value = 1500; // The int value you want to convert
-
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.putInt(value);
-        byte[] bytes = buffer.array();
-
-        ByteBuffer buffer2 = ByteBuffer.wrap(bytes);
-        int value2 = buffer2.getInt();
-        System.out.println(value2);*/
-
+            String tmpDir = System.getProperty("java.io.tmpdir");
+            System.out.println("Temporary directory: " + tmpDir);
     }
 
     @Override
