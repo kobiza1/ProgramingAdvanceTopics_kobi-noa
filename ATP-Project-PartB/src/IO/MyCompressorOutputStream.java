@@ -50,23 +50,15 @@ public class MyCompressorOutputStream extends OutputStream {
         }
 
         byte[] res = from_list_to_array(compressed_maze);
+
+
         try {
             out.write(res);
             out.flush();
-
-            //out.close();
+            out.close();
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
-//        finally {
-//            try {
-//                out.close();
-//            } catch (OptionalDataException e){
-//                System.out.println(e.getMessage());
-//            }catch (IOException e){
-//                System.out.println(e.getMessage());
-//            }
-//        }
     }
 
     private String row_to_str(byte[] b, int number_of_cols, int start_index) {

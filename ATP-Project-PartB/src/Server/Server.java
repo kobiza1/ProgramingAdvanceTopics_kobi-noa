@@ -3,6 +3,7 @@ package Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,19 +42,17 @@ public class Server {
                 try {
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("Client accepted: " + clientSocket.toString());
-                    threadPool.execute(() -> {
-                        ServerStrategy(clientSocket);
-                    });
+                    threadPool.execute(() -> ServerStrategy(clientSocket));
 
-                } catch (SocketTimeoutException e){
+                } catch (SocketTimeoutException e) {
                     System.out.println("Socket timeout");
                 }
             }
 
             serverSocket.close();
             threadPool.shutdownNow();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

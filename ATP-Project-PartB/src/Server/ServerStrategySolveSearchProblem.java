@@ -1,5 +1,6 @@
 package Server;
 
+import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.Maze;
 import algorithms.search.*;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
-    private Hashtable<Maze, File> solutionToMaze;
+    private Hashtable<Integer, File> solutionToMaze;
 
     public ServerStrategySolveSearchProblem(){
         solutionToMaze = new Hashtable<>();
@@ -25,20 +26,27 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             ISearchingAlgorithm searcher = Configurations.getInstance().getMazeSearchingAlgorithm();
 
             Maze maze = (Maze) in.readObject();
+            int hashMaze = maze.hashCode();
             Solution solution;
-            if(!solutionToMaze.containsKey(maze)) {
+            if(!solutionToMaze.containsKey(hashMaze)) {
                 SearchableMaze searchableMaze = new SearchableMaze(maze);
                 solution = searcher.solve(searchableMaze);
 
+
                 String tempDirectoryPath = System.getProperty("java.io.tmpdir");
                 File solutionFile = new File(tempDirectoryPath);
-                FileOutputStream fileOutput = new FileOutputStream(solutionFile);
+
+                int index = maze.hashCode();
+                String tempFileName = "Solution"+index+".txt";
+                File newFile = new File(solutionFile, tempFileName);
+
+                FileOutputStream fileOutput = new FileOutputStream(newFile.getPath());
                 ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
                 objectOutput.writeObject(solution);
-                solutionToMaze.put(maze, solutionFile);
+                solutionToMaze.put(index, solutionFile);
             } else {
-                File solutionFile = solutionToMaze.get(maze);
-                FileInputStream fileInput = new FileInputStream(solutionFile);
+                File solutionFile = solutionToMaze.get(hashMaze);
+                FileInputStream fileInput = new FileInputStream(solutionFile.getPath());
                 ObjectInputStream objectInput = new ObjectInputStream(fileInput);
                 solution = (Solution) objectInput.readObject();
             }
@@ -48,6 +56,10 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static void main(String[] args) {
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        System.out.println("Temporary directory: " + tmpDir);
     }
 }
 
