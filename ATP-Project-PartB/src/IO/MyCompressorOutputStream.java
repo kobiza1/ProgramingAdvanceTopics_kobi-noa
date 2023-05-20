@@ -106,22 +106,6 @@ public class MyCompressorOutputStream extends OutputStream {
         byte[] bytes = buffer.array();
         return bytes;
     }
-
-
-
-        public static void main(String[] args) {
-            int number = 0; // Example integer less than or equal to 1000
-            byte[] byteArray = convertToByteArray(number);
-
-            System.out.println("Number: " + number);
-            System.out.print("Byte Array: [ ");
-            for (byte b : byteArray) {
-                System.out.print((b & 0xFF) + " ");
-            }
-            System.out.println("]");
-
-        }
-
 }
 
 

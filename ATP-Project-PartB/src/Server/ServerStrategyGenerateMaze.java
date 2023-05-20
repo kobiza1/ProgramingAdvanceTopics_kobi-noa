@@ -21,7 +21,7 @@ public class ServerStrategyGenerateMaze implements IServerStrategy{
             Maze newMaze = generator.generate(indexes[0], indexes[1]);
 
             //OutputStream compressor = new MyCompressorOutputStream(out);
-            String tempFileName = "mazeHolder.txt";
+            String tempFileName = "tempFile.txt";
 
             OutputStream compressor = new MyCompressorOutputStream(new FileOutputStream(tempFileName));
             byte[] array = newMaze.toByteArray();

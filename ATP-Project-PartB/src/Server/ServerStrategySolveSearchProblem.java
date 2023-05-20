@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
-    private Hashtable<Integer, File> solutionToMaze;
+    private Hashtable<Maze, File> solutionToMaze;
 
     public ServerStrategySolveSearchProblem(){
         solutionToMaze = new Hashtable<>();
@@ -26,9 +26,8 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             ISearchingAlgorithm searcher = Configurations.getInstance().getMazeSearchingAlgorithm();
 
             Maze maze = (Maze) in.readObject();
-            int hashMaze = maze.hashCode();
             Solution solution;
-            if(!solutionToMaze.containsKey(hashMaze)) {
+            if(!solutionToMaze.containsKey(maze)) {
                 SearchableMaze searchableMaze = new SearchableMaze(maze);
                 solution = searcher.solve(searchableMaze);
 
@@ -37,29 +36,31 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                 File solutionFile = new File(tempDirectoryPath);
 
                 int index = maze.hashCode();
-                String tempFileName = "Solution"+index+".txt";
+                String tempFileName = "Solution #"+index;
                 File newFile = new File(solutionFile, tempFileName);
 
                 FileOutputStream fileOutput = new FileOutputStream(newFile.getPath());
                 ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
                 objectOutput.writeObject(solution);
-                solutionToMaze.put(index, solutionFile);
+                solutionToMaze.put(maze, solutionFile);
+
+                solution.setName(tempFileName);
             } else {
-                File solutionFile = solutionToMaze.get(hashMaze);
+                File solutionFile = solutionToMaze.get(maze);
                 FileInputStream fileInput = new FileInputStream(solutionFile.getPath());
                 ObjectInputStream objectInput = new ObjectInputStream(fileInput);
                 solution = (Solution) objectInput.readObject();
+
+                solution.setName(solutionFile.getName());
             }
 
             out.writeObject(solution);
             out.flush();
+            out.close();
+            in.close();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-    public static void main(String[] args) {
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        System.out.println("Temporary directory: " + tmpDir);
     }
 }
 

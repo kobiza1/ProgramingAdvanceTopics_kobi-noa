@@ -93,20 +93,4 @@ public class SimpleCompressorOutputStream extends OutputStream {
             compressedMaze.add((byte)counter);
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        byte[] byteArray = new byte[1000];
-
-        for (int i = 0; i < 1000; i++) {
-            byteArray[i] = (byte) (Math.random() < 0.9 ? 0 : 1);
-        }
-        OutputStream o = new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                System.out.println(b);
-            }
-        };
-        SimpleCompressorOutputStream c = new SimpleCompressorOutputStream(o);
-        c.write(byteArray);
-    }
 }
