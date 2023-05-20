@@ -16,47 +16,56 @@ import java.util.List;
 
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
-    private Hashtable<Maze, File> solutionToMaze;
 
-    public ServerStrategySolveSearchProblem(){
-        solutionToMaze = new Hashtable<>();
-    }
+    /**
+     * Overrides the server strategy method to solve a search problem based on a given maze.
+     * @param inFromClient The InputStream for receiving data from the client.
+     * @param outToClient The OutputStream for sending data to the client.
+     */
     @Override
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient) {
+        // Wrap the InputStream with an interruptible input stream to handle interruption during reading
         InputStream interruptibleInputStream = Channels.newInputStream(Channels.newChannel(inFromClient));
 
         try {
             ObjectInputStream in = new ObjectInputStream(interruptibleInputStream);
             ObjectOutputStream out = new ObjectOutputStream(outToClient);
+
+            // Get the maze searching algorithm from configurations
             ISearchingAlgorithm searcher = Configurations.getInstance().getMazeSearchingAlgorithm();
 
+            // Read the maze from the client input
             Maze maze = (Maze) in.readObject();
+
             Solution solution;
             int index = 0;
             SearchableMaze searchableMaze = new SearchableMaze(maze);
-
-
-
             String tempDirectoryPath = System.getProperty("java.io.tmpdir");
             File solutionFile_maze = new File(tempDirectoryPath);
 
+            // Find all files matching the "Maze" prefix in the temporary directory
             File[] all_files_match_maze = solutionFile_maze.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
                     return name.startsWith("Maze");
                 }
             });
+
+            // Find all files matching the "Solution" prefix in the temporary directory
             File[] all_files_match_solution = solutionFile_maze.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
                     return name.startsWith("Solution");
                 }
             });
+
+            // Check if a solution already exists for the received maze
             Solution sol = find_if_maze_and_sol_exist(all_files_match_maze, all_files_match_solution, maze);
             if(sol != null){
                 out.writeObject(sol);
             }
             else{
+                // Compute a new solution for the maze
                 index = find_max_value_maze(all_files_match_maze) + 1;
                 solution = searcher.solve(searchableMaze);
 
@@ -66,14 +75,13 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                 File newFile_maze = new File(solutionFile_solution, tempFileName_maze);
                 File newFile_sol = new File(solutionFile_solution, tempFileName_sol);
 
-
+                // Store the maze and solution objects in separate files
                 FileOutputStream fileOutput_sol = new FileOutputStream(newFile_sol.getPath());
                 ObjectOutputStream objectOutput_sol = new ObjectOutputStream(fileOutput_sol);
                 objectOutput_sol.writeObject(solution);
                 FileOutputStream fileOutput_maze = new FileOutputStream(newFile_maze.getPath());
                 ObjectOutputStream objectOutput_maze = new ObjectOutputStream(fileOutput_maze);
                 objectOutput_maze.writeObject(maze);
-                solutionToMaze.put(maze, solutionFile_solution);
 
                 solution.setName(tempFileName_sol);
                 out.writeObject(solution);
@@ -87,6 +95,11 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         }
     }
 
+    /**
+     * Finds the maximum value of the maze file names in the given array of files.
+     * @param allFilesMatchMaze An array of files matching the "Maze" prefix.
+     * @return The maximum value of the maze file names.
+     */
     private int find_max_value_maze(File[] allFilesMatchMaze) {
         String num_as_string, name_of_file;
         String[] parts;
@@ -107,6 +120,13 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         return max;
     }
 
+    /**
+     * Finds if a maze and its corresponding solution exist in the given arrays of maze and solution files.
+     * @param all_files_match_maze An array of files matching the "Maze" prefix.
+     * @param all_files_match_solution An array of files matching the "Solution" prefix.
+     * @param maze_we_got The maze object received from the client.
+     * @return The solution object if a matching maze and solution are found, otherwise null.
+     */
     private Solution find_if_maze_and_sol_exist(File[] all_files_match_maze, File[] all_files_match_solution, Maze maze_we_got){
         String num_as_string, name_of_file, name_to_search;
         String[] parts;

@@ -14,7 +14,6 @@ public class Server {
     private final IServerStrategy strategy;
     private volatile boolean stop;
     private final ExecutorService threadPool; // Thread pool
-
     private Thread serverThread;
 
     public Server(int port, int listeningIntervalMS, IServerStrategy strategy) {
@@ -28,10 +27,18 @@ public class Server {
         this.serverThread = new Thread(this::startServer);
     }
 
+    /**
+     * Starts the server by starting the server thread.
+     */
     public void start(){
         serverThread.start();
     }
 
+    /**
+     * Starts the server and listens for client connections.
+     * The server runs in a loop until the stop flag is set.
+     * For each client connection, a new thread from the thread pool is used to execute the server strategy.
+     */
     public void startServer(){
         try {
             ServerSocket serverSocket = new ServerSocket(port);
@@ -56,12 +63,21 @@ public class Server {
         }
     }
 
+    /**
+     * Stops the server by setting the stop flag.
+     */
     public void stop(){
         synchronized ((Object) stop) {
             stop = true;
         }
     }
 
+    /**
+     * Executes the server strategy for handling client requests.
+     * The server strategy is responsible for processing client input and providing output.
+     *
+     * @param clientSocket The socket representing the client connection.
+     */
     private void ServerStrategy(Socket clientSocket){
         try {
             strategy.serverStrategy(clientSocket.getInputStream(), clientSocket.getOutputStream());

@@ -5,8 +5,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class SimpleCompressorOutputStream extends OutputStream {
-
     private OutputStream out;
+
+    /**
+     * Constructs a SimpleCompressorOutputStream object with the specified output stream.
+     *
+     * @param outputStream The output stream to which the compressed data will be written.
+     */
     public  SimpleCompressorOutputStream(OutputStream outputStream){
         out = outputStream;
     }
@@ -16,6 +21,13 @@ public class SimpleCompressorOutputStream extends OutputStream {
         // DO NOTHING
     }
 
+    /**
+     * Writes an array of bytes to the output stream.
+     * Compresses the data in the byte array and writes the compressed data to the output stream.
+     *
+     * @param b The byte array to be compressed and written.
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void write(byte[] b) {
         ArrayList<Byte> compressed_maze = new ArrayList<>();
@@ -51,8 +63,12 @@ public class SimpleCompressorOutputStream extends OutputStream {
         }
     }
 
-
-
+    /**
+     * Converts an ArrayList of bytes to an array of bytes.
+     *
+     * @param compressedMaze The ArrayList of bytes to be converted.
+     * @return The resulting array of bytes.
+     */
     private byte[] from_list_to_array(ArrayList<Byte> compressedMaze) {
         byte[] to_return = new byte[compressedMaze.size()];
         for(int i=0; i<compressedMaze.size(); i++){
@@ -61,6 +77,13 @@ public class SimpleCompressorOutputStream extends OutputStream {
         return to_return;
     }
 
+    /**
+     * Adds an integer value to the ArrayList of bytes based on the compression rules.
+     *
+     * @param counter The integer value to be compressed and added.
+     * @param compressedMaze The ArrayList of bytes to which the compressed value will be added.
+     * @param num The compression flag indicating the value type (1 or 0).
+     */
     private void add_int_to_bytes_list(int counter, ArrayList<Byte> compressedMaze, int num){
         if(counter > 127){
             int dividend  = counter/127;

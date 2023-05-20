@@ -81,8 +81,7 @@ public class RunCommunicateWithServers {
                         ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
                         ObjectInputStream fromServer = new ObjectInputStream(inFromServer);
                         toServer.flush();
-                        //MyMazeGenerator mg = new MyMazeGenerator();
-                        EmptyMazeGenerator mg = new EmptyMazeGenerator();
+                        MyMazeGenerator mg = new MyMazeGenerator();
                         Maze maze = mg.generate(50, 50);
                         maze.print();
                         toServer.writeObject(maze); //send maze to server
