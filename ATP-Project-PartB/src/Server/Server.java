@@ -14,7 +14,7 @@ public class Server {
     private final IServerStrategy strategy;
     private volatile boolean stop;
     private final ExecutorService threadPool; // Thread pool
-    private Thread serverThread;
+    private final Thread serverThread;
 
     public Server(int port, int listeningIntervalMS, IServerStrategy strategy) {
         this.port = port;
@@ -51,8 +51,8 @@ public class Server {
                     System.out.println("Client accepted: " + clientSocket.toString());
                     threadPool.execute(() -> ServerStrategy(clientSocket));
 
-                } catch (SocketTimeoutException e) {
-                    System.out.println("Socket timeout");
+                } catch (SocketTimeoutException ignore) {
+
                 }
             }
 
