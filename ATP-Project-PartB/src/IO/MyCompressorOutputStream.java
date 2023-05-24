@@ -24,10 +24,10 @@ public class MyCompressorOutputStream extends OutputStream {
         ArrayList<Byte> compressed_maze = new ArrayList<>();
         // get the number of rows and columns
         int number_of_rows = get_int_from_indexes(b, 0, 4), number_of_cols = get_int_from_indexes(b, 4, 8);
-        int num_of_Row=0;
         String binary_Row;
         byte[] bytes;
-        // convert into byte array and put it into the compressed list
+
+        // convert the rows and cols values into byte array and put it into the compressed list
        byte[] rows_in_bytes = convertToByteArray(number_of_rows);
        byte[] cols_in_bytes = convertToByteArray(number_of_cols);
 
@@ -37,23 +37,17 @@ public class MyCompressorOutputStream extends OutputStream {
        for(int i=0;i<cols_in_bytes.length;i++){
            compressed_maze.add(cols_in_bytes[i]);
        }
-        //
-       // while (num_of_Row < number_of_rows){
-           // binary_Row = row_to_str(b, number_of_cols, num_of_Row*number_of_rows);
-           // num_of_Row++;
+         // get string that represent all the map
         binary_Row = get_all_map_as_string(b);
 
         bytes = new BigInteger(binary_Row, 2).toByteArray();
-
+        // add the byte to the array
         for (byte aByte : bytes) {
-            //compressed_maze.add((byte)num_of_Row);
             compressed_maze.add(aByte);
         }
-      //  }
-
+        // convert into byte array
         byte[] res = from_list_to_array(compressed_maze);
-
-
+        // write into the output stream
         try {
             out.write(res);
             out.flush();
@@ -63,29 +57,6 @@ public class MyCompressorOutputStream extends OutputStream {
         }
     }
 
-    private String row_to_str(byte[] b, int number_of_cols, int start_index) {
-        int const_gap = 8;
-        String row_str = "";
-        for(int i=start_index; i<start_index+number_of_cols; i++){
-            row_str += b[i + const_gap];
-        }
-
-        return row_str;
-    }
-
-   /* private String col_to_str(byte[] b, int number_of_rows, int start_index, int number_of_cols) {
-        int const_gap = 16;
-        String row_str = "";
-        boolean first_zeros_seq = true;
-        for(int i=0; i<number_of_rows; i++){
-            if(first_zeros_seq && b[i*number_of_cols + const_gap + start_index] == 0){}
-            else {
-                first_zeros_seq = false;
-                row_str += b[i*number_of_cols + const_gap + start_index];
-            }
-        }
-        return row_str;
-    }*/
 
     private int get_int_from_indexes(byte[] b, int start, int end) {
         byte[] subArray1 = Arrays.copyOfRange(b, start, end);
@@ -93,6 +64,7 @@ public class MyCompressorOutputStream extends OutputStream {
         return bigInteger1.intValue();
     }
 
+    // copy the list into array
     private byte[] from_list_to_array(ArrayList<Byte> compressedMaze) {
         byte[] to_return = new byte[compressedMaze.size()];
         for(int i=0; i<compressedMaze.size(); i++){
@@ -101,13 +73,15 @@ public class MyCompressorOutputStream extends OutputStream {
         return to_return;
     }
 
-
-    public static byte[] convertToByteArray(int number) {
+    // get int and convert it into array
+    public byte[] convertToByteArray(int number) {
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
         buffer.putInt(number);
         byte[] bytes = buffer.array();
         return bytes;
     }
+
+    // convert the bytrs array into 1 string of 1's and 0's
     private String get_all_map_as_string(byte[] b) {
         int const_gap = 8;
         String row_str = "";
