@@ -38,8 +38,11 @@ public class SimpleDecompressorInputStream extends InputStream {
     @Override
     public int read(byte[] decompressed) throws IOException {
         byte[] compressed_list = in.readAllBytes();
-        int i=0;
-        int decompressed_index = 0;
+        for(int i=0; i<8; i++){
+            decompressed[i] = compressed_list[i];
+        }
+        int i=8;
+        int decompressed_index = 8;
         while(compressed_list.length > i){
             i++;
             if(compressed_list.length > i){

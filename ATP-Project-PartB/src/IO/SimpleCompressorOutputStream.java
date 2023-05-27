@@ -32,7 +32,10 @@ public class SimpleCompressorOutputStream extends OutputStream {
     public void write(byte[] b) {
         ArrayList<Byte> compressed_maze = new ArrayList<>();
         int counter = 0;
-        int i=16;
+        for(int i =0; i<8; i++){
+            compressed_maze.add(b[i]);
+        }
+        int i=8;
         while(i < b.length){
             while(b.length > i && b[i] == 1){
                 counter++;
