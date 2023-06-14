@@ -1,18 +1,10 @@
 package Server;
 
-import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.Maze;
 import algorithms.search.*;
 
 import java.io.*;
-import java.net.URI;
 import java.nio.channels.Channels;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
 
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy {
@@ -60,7 +52,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             });
 
             // Check if a solution already exists for the received maze
-            Solution sol = find_if_maze_and_sol_exist(all_files_match_maze, all_files_match_solution, maze);
+            Solution sol = find_if_sol_exist(all_files_match_maze, all_files_match_solution, maze);
             if(sol != null){
                 out.writeObject(sol);
             }
@@ -69,8 +61,8 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                 index = find_max_value_maze(all_files_match_maze) + 1;
 
                 solution = searcher.solve(searchableMaze);
-                save_maze(maze, index);
-                save_solution(index, solution);
+                save_maze(maze, index, tempDirectoryPath);
+                save_solution(index, solution, tempDirectoryPath);
                 out.writeObject(solution);
 
             }
@@ -114,11 +106,33 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
      * @param maze_we_got The maze object received from the client.
      * @return The solution object if a matching maze and solution are found, otherwise null.
      */
-    private Solution find_if_maze_and_sol_exist(File[] all_files_match_maze, File[] all_files_match_solution, Maze maze_we_got){
-        String num_as_string, name_of_file, name_to_search;
+    private Solution find_if_sol_exist(File[] all_files_match_maze, File[] all_files_match_solution, Maze maze_we_got){
+        String name_to_search;
+        String num_as_string = find_right_maze(maze_we_got, all_files_match_maze);
+        try {
+            if(num_as_string != null){
+                for (File f : all_files_match_solution) {
+                    name_to_search = "Solution #" + num_as_string;
+                    if (f.getName().equals(name_to_search)) {
+                        FileInputStream fileInput_sol = new FileInputStream(f.getPath());
+                        ObjectInputStream objectInput_sol = new ObjectInputStream(fileInput_sol);
+                        Solution sol = (Solution) objectInput_sol.readObject();
+                        sol.setName(f.getName());
+                        return sol;
+                    }
+                }
+            }
+            return null;
+        }catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String find_right_maze(Maze mazeWeGot, File[] allFilesMatchMaze) {
+        String num_as_string, name_of_file;
         String[] parts;
         try {
-            for (File file : all_files_match_maze) {
+            for (File file : allFilesMatchMaze) {
                 FileInputStream fileInput = new FileInputStream(file.getPath());
                 ObjectInputStream objectInput = new ObjectInputStream(fileInput);
                 name_of_file = file.getName();
@@ -128,17 +142,8 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                 }
                 num_as_string = parts[1];
                 Maze m = (Maze) objectInput.readObject();
-                if (m.equals(maze_we_got)) {
-                    for (File f : all_files_match_solution) {
-                        name_to_search = "Solution #" + num_as_string;
-                        if (f.getName().equals(name_to_search)) {
-                            FileInputStream fileInput_sol = new FileInputStream(f.getPath());
-                            ObjectInputStream objectInput_sol = new ObjectInputStream(fileInput_sol);
-                            Solution sol = (Solution) objectInput_sol.readObject();
-                            sol.setName(f.getName());
-                            return sol;
-                        }
-                    }
+                if(m.equals(mazeWeGot)){
+                    return num_as_string;
                 }
             }
             return null;
@@ -146,11 +151,12 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             throw new RuntimeException(e);
         }
     }
-    public void save_maze(Maze maze, int index){
+
+    public void save_maze(Maze maze, int index, String directoryPath){
 
     try{
-        String tempDirectoryPath = System.getProperty("java.io.tmpdir");
-        File solutionFile_solution = new File(tempDirectoryPath);
+
+        File solutionFile_solution = new File(directoryPath);
         String tempFileName_maze = "Maze #" + index;
         File newFile_maze = new File(solutionFile_solution, tempFileName_maze);
 
@@ -162,11 +168,10 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         throw new RuntimeException(e);
     }
     }
-    public void save_solution(int index, Solution solution){
+    public void save_solution(int index, Solution solution, String directoryPath){
 
         try{
-            String tempDirectoryPath = System.getProperty("java.io.tmpdir");
-            File solutionFile_solution = new File(tempDirectoryPath);
+            File solutionFile_solution = new File(directoryPath);
             String tempFileName_sol = "Solution #" + index;
             File newFile_sol = new File(solutionFile_solution, tempFileName_sol);
 
