@@ -67,23 +67,10 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             else{
                 // Compute a new solution for the maze
                 index = find_max_value_maze(all_files_match_maze) + 1;
+
                 solution = searcher.solve(searchableMaze);
-
-                File solutionFile_solution = new File(tempDirectoryPath);
-                String tempFileName_maze = "Maze #" + index;
-                String tempFileName_sol = "Solution #" + index;
-                File newFile_maze = new File(solutionFile_solution, tempFileName_maze);
-                File newFile_sol = new File(solutionFile_solution, tempFileName_sol);
-
-                // Store the maze and solution objects in separate files
-                FileOutputStream fileOutput_sol = new FileOutputStream(newFile_sol.getPath());
-                ObjectOutputStream objectOutput_sol = new ObjectOutputStream(fileOutput_sol);
-                objectOutput_sol.writeObject(solution);
-                FileOutputStream fileOutput_maze = new FileOutputStream(newFile_maze.getPath());
-                ObjectOutputStream objectOutput_maze = new ObjectOutputStream(fileOutput_maze);
-                objectOutput_maze.writeObject(maze);
-
-                solution.setName(tempFileName_sol);
+                save_maze(maze, index);
+                save_solution(index, solution);
                 out.writeObject(solution);
 
             }
@@ -156,6 +143,40 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             }
             return null;
         }catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void save_maze(Maze maze, int index){
+
+    try{
+        String tempDirectoryPath = System.getProperty("java.io.tmpdir");
+        File solutionFile_solution = new File(tempDirectoryPath);
+        String tempFileName_maze = "Maze #" + index;
+        File newFile_maze = new File(solutionFile_solution, tempFileName_maze);
+
+        FileOutputStream fileOutput_maze = new FileOutputStream(newFile_maze.getPath());
+        ObjectOutputStream objectOutput_maze = new ObjectOutputStream(fileOutput_maze);
+        objectOutput_maze.writeObject(maze);
+    }
+    catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+    }
+    public void save_solution(int index, Solution solution){
+
+        try{
+            String tempDirectoryPath = System.getProperty("java.io.tmpdir");
+            File solutionFile_solution = new File(tempDirectoryPath);
+            String tempFileName_sol = "Solution #" + index;
+            File newFile_sol = new File(solutionFile_solution, tempFileName_sol);
+
+            // Store the maze and solution objects in separate files
+            FileOutputStream fileOutput_sol = new FileOutputStream(newFile_sol.getPath());
+            ObjectOutputStream objectOutput_sol = new ObjectOutputStream(fileOutput_sol);
+            objectOutput_sol.writeObject(solution);
+            solution.setName(tempFileName_sol);
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

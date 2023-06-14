@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/ATP-Project-PartB/JUnit" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ATP-Project-PartB/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ATP-Project-PartB/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/ATP-Project-PartB/out" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

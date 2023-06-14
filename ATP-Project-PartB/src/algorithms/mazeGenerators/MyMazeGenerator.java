@@ -24,6 +24,7 @@ public class MyMazeGenerator extends AMazeGenerator{
             int[][] ones_maze_board = initialize_with_ones(); // fill the maze board with walls
             my_maze = new Maze(ones_maze_board, rows_num, columns_num);
             Position startPosition = my_maze.getStartPosition();
+            my_maze.set_value_of_position(0, 0, 0);
             this.add_wall_to_list(startPosition);
             primAlgo(); // run prime algorithm
 
